@@ -7,14 +7,18 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.launcher.t9search.MapTrie;
+import com.example.launcher.t9search.T9Trie;
 import com.example.launcher.utils.AppInfo;
 import com.example.launcher.utils.ViewPagerAdapter;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import android.app.Fragment;
@@ -23,15 +27,12 @@ import android.app.FragmentTransaction;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static String favApps[]={"Youtube","Chrome","Mentor","Gmail","Google"};
+    public static String favApps[]={"Phone","Google"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        //loadFragment(new FragmentA());
-        //loadFragment(new FragmentB());
 
         ViewPager mPager = (ViewPager) findViewById(R.id.mainFrame);
         ViewPagerAdapter mPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
@@ -40,12 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    //to remove
-    private void loadFragment(Fragment fragment) {
-        FragmentManager fm = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fm.beginTransaction();
-        fragmentTransaction.replace(R.id.mainFrame, fragment);
-        fragmentTransaction.commit(); // save the changes
-    }
+
+
 
 }

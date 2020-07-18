@@ -1,6 +1,7 @@
 package com.example.launcher;
 
-import android.app.Fragment;
+import androidx.fragment.app.Fragment;
+//import android.app.Fragment;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -31,8 +32,8 @@ public class FragmentA extends Fragment {
         view = inflater.inflate(R.layout.fragment_a_layout, container, false);
 
         List<AppInfo> appList=generateInstalledAppData();
-        final String favApps[]={"Youtube","Chrome","Mentor","Gmail","Google"};
-        handelFavButtons(appList,favApps,view);
+
+        handelFavButtons(appList,MainActivity.favApps,view);
 
 
         return view;

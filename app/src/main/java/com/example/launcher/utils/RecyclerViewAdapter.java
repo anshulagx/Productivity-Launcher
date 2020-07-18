@@ -1,5 +1,7 @@
 package com.example.launcher.utils;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,6 +53,41 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 view.getContext().startActivity(launchIntent);
             }
         });
+        holder.textView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(final View view) {
+                AlertDialog.Builder builder=new AlertDialog.Builder(view.getContext());
+                builder.setTitle("Settings");
+                String options[]={"Add to Favourite","Settings","Uninstall","More"};
+                builder.setItems(options, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        TextView txt=(TextView)view;
+                        String option=txt.getText().toString();
+
+                        switch (i)
+                        {
+                            case 0:
+                                //add to favourite
+
+                            case 1:
+                                //settings
+
+                            case 3:
+                                //uninstall
+                            case 4:
+                                //more
+
+                        }
+                    }
+                });
+                AlertDialog dialog=builder.create();
+                dialog.show();
+
+                return false;
+            }
+        });
+
     }
 
     @Override

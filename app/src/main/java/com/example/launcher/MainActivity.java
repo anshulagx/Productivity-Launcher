@@ -23,7 +23,7 @@ import android.app.FragmentTransaction;
 
 public class MainActivity extends AppCompatActivity {
 
-    final static String favApps[]={"Youtube","Chrome","Mentor","Gmail","Google"};
+    public static String favApps[]={"Youtube","Chrome","Mentor","Gmail","Google"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

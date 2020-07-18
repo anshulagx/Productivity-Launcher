@@ -2,10 +2,13 @@ package com.example.launcher;
 
 import androidx.fragment.app.Fragment;
 //import android.app.Fragment;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,7 +63,7 @@ public class FragmentA extends Fragment {
 
     private void handelFavButtons(List<AppInfo> appList, String[] favApps, View view) {
 
-        LinearLayout linearLayout=(LinearLayout)view.findViewById(R.id.favAppLayout);
+        final LinearLayout linearLayout=(LinearLayout)view.findViewById(R.id.favAppLayout);
 
         for (final AppInfo app:appList)
         {
@@ -76,6 +79,7 @@ public class FragmentA extends Fragment {
                     text.setTextSize(30);
                     text.setTextColor(getResources().getColor(R.color.colorPrimary));
 
+
                     linearLayout.addView(text);
 
                     text.setOnClickListener(new View.OnClickListener() {
@@ -83,6 +87,41 @@ public class FragmentA extends Fragment {
                         public void onClick(View view) {
                             Intent launchIntent = getActivity().getPackageManager().getLaunchIntentForPackage(app.packageName);
                             startActivity(launchIntent);
+                        }
+                    });
+
+                    text.setOnLongClickListener(new View.OnLongClickListener() {
+                        @Override
+                        public boolean onLongClick(final View view) {
+                            AlertDialog.Builder builder=new AlertDialog.Builder(getContext());
+                            builder.setTitle("Settings");
+                            String options[]={"Remove from Favourite","Settings","More"};
+                            builder.setItems(options, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    TextView txt=(TextView)view;
+
+                                    String option=txt.getText().toString();
+
+
+                                    switch (i)
+                                    {
+                                        case 0:
+                                        //add to favourite
+
+                                        case 1:
+                                        //settings
+
+                                        case 3:
+                                        //more
+
+                                    }
+                                }
+                            });
+                            AlertDialog dialog=builder.create();
+                            dialog.show();
+
+                            return false;
                         }
                     });
                 }

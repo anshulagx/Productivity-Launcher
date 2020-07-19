@@ -26,13 +26,13 @@ public class MainActivity extends AppCompatActivity {
         mPager = (ViewPager) findViewById(R.id.mainFrame);
         ViewPagerAdapter mPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         mPager.setAdapter(mPagerAdapter);
-
+        mPager.setCurrentItem(1);
 
     }
     @Override
     protected void onStart() {
         super.onStart();
-        mPager.setCurrentItem(0);
+        mPager.setCurrentItem(1);
     }
 
 

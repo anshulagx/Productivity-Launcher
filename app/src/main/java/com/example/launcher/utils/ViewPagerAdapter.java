@@ -7,10 +7,11 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import com.example.launcher.FragmentA;
 import com.example.launcher.FragmentB;
+import com.example.launcher.FragmentC;
 
 public class ViewPagerAdapter extends FragmentPagerAdapter {
 
-    static final int NUM_PAGES=2;
+    static final int NUM_PAGES=3;
 
     public ViewPagerAdapter(FragmentManager fm) {
         super(fm);
@@ -21,8 +22,10 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
         switch (position)
         {
             case 0:
-                return new FragmentA();
+                return new FragmentC();
             case 1:
+                return new FragmentA();
+            case 2:
                 return new FragmentB();
         }
         return new FragmentA();

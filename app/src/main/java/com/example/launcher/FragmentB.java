@@ -7,7 +7,6 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,13 +14,11 @@ import android.view.ViewGroup;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.launcher.t9search.T9Trie;
 import com.example.launcher.utils.AppInfo;
-import com.example.launcher.utils.RecyclerViewAdapter;
+import com.example.launcher.utils.FragmentB_RecyclerViewAdapter;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.LinkedList;
 import java.util.List;
 
 public class FragmentB extends Fragment {
@@ -42,10 +39,6 @@ public class FragmentB extends Fragment {
         });
         handelRecyclerViewStuff(view,appList);
 
-//        String searchPrefix="5";
-//        T9Trie<String> trie=initTrie(appList);
-//        List<String> suggestions = trie.getT9ValueSuggestions(searchPrefix);
-//        Log.d("TAG",suggestions.toString() );
 
         return view;
     }
@@ -55,7 +48,7 @@ public class FragmentB extends Fragment {
         RecyclerView.LayoutManager layoutManager=new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
-        RecyclerView.Adapter adapter=new RecyclerViewAdapter(data);
+        RecyclerView.Adapter adapter=new FragmentB_RecyclerViewAdapter(data);
         recyclerView.setAdapter(adapter);
 
     }
@@ -80,21 +73,5 @@ public class FragmentB extends Fragment {
 
     }
 
-    private  T9Trie<String> initTrie(List<AppInfo> appList){
-
-        //String searchPrefix="42";
-
-        final T9Trie<String> trie = new T9Trie<>();
-        for (AppInfo app:appList)
-        {
-            LinkedList<String> l=new LinkedList<String>();
-            l.add(app.label);
-            trie.insert(app.label, l);
-        }
-        trie.print();
-//        List<String> suggestions = trie.getT9ValueSuggestions(searchPrefix);
-//        Log.d("TAG",suggestions.toString() );
-        return trie;
-    }
 
 }

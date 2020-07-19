@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="375dp"
+        android:layout_height="296dp"
+        android:layout_marginTop="68dp"
+        android:padding="20px"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.555"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/search_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </FrameLayout>
+
+    <TableLayout
+        android:layout_width="356dp"
+        android:layout_height="323dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/frameLayout">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <Button
+                android:id="@+id/b1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text=""
+
+                android:background="@color/colorPrimaryDark"
+                android:textColor="@color/colorPrimary" />
+
+            <Button
+                android:id="@+id/b2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="abc"
+                android:background="@color/colorPrimaryDark"
+                android:textColor="@color/colorPrimary" />
+
+            <Button
+                android:id="@+id/b3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="def"                 android:background="@color/colorPrimaryDark"
+                android:textColor="@color/colorPrimary" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <Button
+                android:id="@+id/b4"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="ghi"
+                android:layout_weight="1"                android:background="@color/colorPrimaryDark"
+                android:textColor="@color/colorPrimary" />
+
+            <Button
+                android:id="@+id/b5"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="jkl"
+                android:layout_weight="1"                android:background="@color/colorPrimaryDark"
+                android:textColor="@color/colorPrimary" />
+
+            <Button
+                android:id="@+id/b6"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="mno"
+                android:layout_weight="1"                android:background="@color/colorPrimaryDark"
+                android:textColor="@color/colorPrimary" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            >
+
+            <Button
+                android:id="@+id/b7"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="pqrs"                 android:background="@color/colorPrimaryDark"
+                android:textColor="@color/colorPrimary" />
+
+            <Button
+                android:layout_weight="1"
+                android:id="@+id/b8"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="tuv"                 android:background="@color/colorPrimaryDark"
+                android:textColor="@color/colorPrimary" />
+
+            <Button
+                android:layout_weight="1"
+                android:id="@+id/b9"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="wxyz"                 android:background="@color/colorPrimaryDark"
+                android:textColor="@color/colorPrimary" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.75">
+
+            <Button
+                android:layout_weight="1"
+                android:id="@+id/be1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text=""                 android:background="@color/colorPrimaryDark"
+                android:textColor="@color/colorPrimary" />
+
+            <Button
+                android:layout_weight="1"
+                android:id="@+id/be2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text=""                 android:background="@color/colorPrimaryDark"
+                android:textColor="@color/colorPrimary" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/colorPrimaryDark"
+                android:text="BACK"
+                android:id="@+id/be3"
+                android:textColor="@color/colorPrimary" />
+        </TableRow>
+
+
+    </TableLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

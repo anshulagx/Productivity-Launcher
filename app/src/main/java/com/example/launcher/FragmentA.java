@@ -3,16 +3,24 @@ package com.example.launcher;
 import androidx.fragment.app.Fragment;
 //import android.app.Fragment;
 import android.app.AlertDialog;
+import android.appwidget.AppWidgetHost;
+import android.appwidget.AppWidgetHostView;
+import android.appwidget.AppWidgetManager;
+import android.appwidget.AppWidgetProviderInfo;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,7 +34,7 @@ public class FragmentA extends Fragment {
 
 
     View view;
-
+    final int displayWidgetid=38;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState)
     {
@@ -38,6 +46,8 @@ public class FragmentA extends Fragment {
 
         handelFavButtons(appList,MainActivity.favApps,view);
 
+        //everything about widgets in Fragment A
+        setCalenderWidget(displayWidgetid);//38 is default for calendar app widget
 
         return view;
     }
@@ -99,26 +109,47 @@ public class FragmentA extends Fragment {
                             builder.setItems(options, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
-                                    TextView txt=(TextView)view;
+                                    TextView txt = (TextView) view;
 
-                                    String option=txt.getText().toString();
+                                    String option = txt.getText().toString();
 
 
-                                    switch (i)
-                                    {
+                                    switch (i) {
                                         case 0:
-                                        //add to favourite
+                                            //add to favourite
 
                                         case 1:
-                                        //settings
+                                            //settings
+                                            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                            Uri uri = Uri.fromParts("package", getPackageName(option), null);
+                                            intent.setData(uri);
+                                            view.getContext().startActivity(intent);
 
                                         case 3:
-                                        //more
+                                            //more
 
                                     }
                                 }
+
+                                private String getPackageName(String name) {
+                                        PackageManager pm = view.getContext().getPackageManager();
+                                        List<ApplicationInfo> l = pm.getInstalledApplications(PackageManager.GET_META_DATA);
+                                        String packName = "";
+                                        for (ApplicationInfo ai : l) {
+                                            String n = (String)pm.getApplicationLabel(ai);
+                                            if (n.contains(name) || name.contains(n)){
+                                                packName = ai.packageName;
+                                            }
+                                        }
+
+                                        return packName;
+
+
+                                }
+
                             });
-                            AlertDialog dialog=builder.create();
+
+                               AlertDialog dialog=builder.create();
                             dialog.show();
 
                             return false;
@@ -129,5 +160,93 @@ public class FragmentA extends Fragment {
         }
 
 
+    }
+
+
+
+    AppWidgetManager mAppWidgetManager;
+    AppWidgetHost mAppWidgetHost;
+    private int APPWIDGET_HOST_ID = 1;
+//    private int REQUEST_PICK_APPWIDGET = 2;
+//    private int REQUEST_CREATE_APPWIDGET = 3;
+    private void initWidgetHost() {
+        mAppWidgetManager = AppWidgetManager.getInstance(getContext().getApplicationContext());
+        mAppWidgetHost = new AppWidgetHost(getContext().getApplicationContext(), APPWIDGET_HOST_ID);
+    }
+    private void setCalenderWidget(int appWidgetId) {
+        initWidgetHost();
+        AppWidgetProviderInfo appWidgetInfo = mAppWidgetManager.getAppWidgetInfo(appWidgetId);
+        AppWidgetHostView hostView =
+                mAppWidgetHost.createView(getContext().getApplicationContext(), appWidgetId, appWidgetInfo);
+        hostView.setAppWidget(appWidgetId, appWidgetInfo);
+        ((FrameLayout)view.findViewById(R.id.widgetFrame)).removeAllViews();
+        ((FrameLayout)view.findViewById(R.id.widgetFrame)).addView(hostView);
+
+        Log.i("TAG", "The widget size is: " + appWidgetInfo.minWidth + "*" + appWidgetInfo.minHeight);
+
+    }
+
+//    void selectWidget() {
+//        int appWidgetId = this.mAppWidgetHost.allocateAppWidgetId();
+//        Intent pickIntent = new Intent(AppWidgetManager.ACTION_APPWIDGET_PICK);
+//        pickIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+//        startActivityForResult(pickIntent, REQUEST_PICK_APPWIDGET);
+//    }
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if (resultCode == getActivity().RESULT_OK) {
+//            if (requestCode == REQUEST_PICK_APPWIDGET) {
+//                configureWidget(data);
+//            }
+//            else if (requestCode == REQUEST_CREATE_APPWIDGET) {
+//                createWidget(data);
+//            }
+//        }
+//        else if (resultCode == getActivity().RESULT_CANCELED && data != null) {
+//            int appWidgetId = data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, -1);
+//            if (appWidgetId != -1) {
+//                mAppWidgetHost.deleteAppWidgetId(appWidgetId);
+//            }
+//        }
+//    }
+//    private void configureWidget(Intent data) {
+//        Bundle extras = data.getExtras();
+//        int appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, -1);
+//        Log.d("TAG", "configureWidget: "+appWidgetId);
+//        AppWidgetProviderInfo appWidgetInfo = mAppWidgetManager.getAppWidgetInfo(appWidgetId);
+//        if (appWidgetInfo.configure != null) {
+//            Intent intent = new Intent(AppWidgetManager.ACTION_APPWIDGET_CONFIGURE);
+//            intent.setComponent(appWidgetInfo.configure);
+//            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+//            startActivityForResult(intent, REQUEST_CREATE_APPWIDGET);
+//        } else {
+//            createWidget(data);
+//        }
+//    }
+//    public void createWidget(Intent data) {
+//        Bundle extras = data.getExtras();
+//        int appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, -1);
+//
+//        AppWidgetProviderInfo appWidgetInfo = mAppWidgetManager.getAppWidgetInfo(appWidgetId);
+//
+//        AppWidgetHostView hostView =
+//                mAppWidgetHost.createView(getContext().getApplicationContext(), appWidgetId, appWidgetInfo);
+//        hostView.setAppWidget(appWidgetId, appWidgetInfo);
+//        ((FrameLayout)view.findViewById(R.id.widgetFrame)).removeAllViews();
+//        ((FrameLayout)view.findViewById(R.id.widgetFrame)).addView(hostView);
+//
+//        Log.i("TAG", "The widget size is: " + appWidgetInfo.minWidth + "*" + appWidgetInfo.minHeight);
+//    }
+
+
+
+    @Override public void onStart() {
+        super.onStart();
+        mAppWidgetHost.startListening();
+    }
+    @Override public void onStop() {
+        super.onStop();
+        mAppWidgetHost.stopListening();
     }
 }

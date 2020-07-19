@@ -42,10 +42,10 @@ public class FragmentB extends Fragment {
         });
         handelRecyclerViewStuff(view,appList);
 
-        String searchPrefix="5";
-        T9Trie<String> trie=initTrie(appList);
-        List<String> suggestions = trie.getT9ValueSuggestions(searchPrefix);
-        Log.d("TAG",suggestions.toString() );
+//        String searchPrefix="5";
+//        T9Trie<String> trie=initTrie(appList);
+//        List<String> suggestions = trie.getT9ValueSuggestions(searchPrefix);
+//        Log.d("TAG",suggestions.toString() );
 
         return view;
     }

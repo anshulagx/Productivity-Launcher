@@ -3,6 +3,10 @@ package com.example.launcher.utils;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,13 +76,31 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
                             case 1:
                                 //settings
-
+                                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                Uri uri = Uri.fromParts("package", getPackageName(option), null);
+                                intent.setData(uri);
+                                view.getContext().startActivity(intent);
                             case 3:
                                 //uninstall
                             case 4:
                                 //more
 
                         }
+                    }
+
+                    private String getPackageName(String name) {
+                        PackageManager pm = view.getContext().getPackageManager();
+                        List<ApplicationInfo> l = pm.getInstalledApplications(PackageManager.GET_META_DATA);
+                        String packName = "";
+                        for (ApplicationInfo ai : l) {
+                            String n = (String)pm.getApplicationLabel(ai);
+                            if (n.contains(name) || name.contains(n)){
+                                packName = ai.packageName;
+                            }
+                        }
+
+                        return packName;
+
                     }
                 });
                 AlertDialog dialog=builder.create();

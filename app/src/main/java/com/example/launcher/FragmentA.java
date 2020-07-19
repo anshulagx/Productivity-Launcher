@@ -121,7 +121,7 @@ public class FragmentA extends Fragment {
                                         case 1:
                                             //settings
                                             Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                                            Uri uri = Uri.fromParts("package", getPackageName(option), null);
+                                            Uri uri = Uri.fromParts("package", MainActivity.appMap.get(option), null);
                                             intent.setData(uri);
                                             view.getContext().startActivity(intent);
 

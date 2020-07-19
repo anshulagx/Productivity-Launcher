@@ -16,6 +16,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.launcher.MainActivity;
 import com.example.launcher.R;
 
 import java.util.List;
@@ -78,7 +79,7 @@ public class FragmentB_RecyclerViewAdapter extends RecyclerView.Adapter<Fragment
                             case 1:
                                 //settings
                                 Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                                Uri uri = Uri.fromParts("package", getPackageName(option), null);
+                                Uri uri = Uri.fromParts("package", MainActivity.appMap.get(option), null);
                                 intent.setData(uri);
                                 view.getContext().startActivity(intent);
                             case 3:

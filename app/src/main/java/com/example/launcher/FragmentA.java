@@ -42,7 +42,7 @@ public class FragmentA extends Fragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_a_layout, container, false);
 
-        List<AppInfo> appList=generateInstalledAppData();
+        List<AppInfo> appList=MainActivity.appData;
 
         handelFavButtons(appList,MainActivity.favApps,view);
 
@@ -132,15 +132,17 @@ public class FragmentA extends Fragment {
                                 }
 
                                 private String getPackageName(String name) {
-                                        PackageManager pm = view.getContext().getPackageManager();
-                                        List<ApplicationInfo> l = pm.getInstalledApplications(PackageManager.GET_META_DATA);
-                                        String packName = "";
-                                        for (ApplicationInfo ai : l) {
-                                            String n = (String)pm.getApplicationLabel(ai);
-                                            if (n.contains(name) || name.contains(n)){
-                                                packName = ai.packageName;
-                                            }
-                                        }
+                                    //legacy
+//                                        PackageManager pm = view.getContext().getPackageManager();
+//                                        List<ApplicationInfo> l = pm.getInstalledApplications(PackageManager.GET_META_DATA);
+//                                        String packName = "";
+//                                        for (ApplicationInfo ai : l) {
+//                                            String n = (String)pm.getApplicationLabel(ai);
+//                                            if (n.contains(name) || name.contains(n)){
+//                                                packName = ai.packageName;
+//                                            }
+//                                        }
+                                    String packName=MainActivity.appMap.get("name");
 
                                         return packName;
 

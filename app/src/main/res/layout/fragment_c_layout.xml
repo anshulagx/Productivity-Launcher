@@ -10,12 +10,11 @@
         android:id="@+id/frameLayout"
         android:layout_width="375dp"
         android:layout_height="296dp"
-        android:layout_marginTop="68dp"
-        android:padding="20px"
+        android:layout_marginTop="50dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.555"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/search_recycler_view"
             android:layout_width="match_parent"
@@ -24,8 +23,8 @@
     </FrameLayout>
 
     <TableLayout
-        android:layout_width="356dp"
-        android:layout_height="323dp"
+        android:layout_width="404dp"
+        android:layout_height="374dp"
         android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -42,9 +41,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text=""
-
                 android:background="@color/colorPrimaryDark"
+
+                android:text=""
                 android:textColor="@color/colorPrimary" />
 
             <Button
@@ -52,8 +51,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="abc"
                 android:background="@color/colorPrimaryDark"
+                android:text="abc"
                 android:textColor="@color/colorPrimary" />
 
             <Button
@@ -61,7 +60,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="def"                 android:background="@color/colorPrimaryDark"
+                android:background="@color/colorPrimaryDark"
+                android:text="def"
                 android:textColor="@color/colorPrimary" />
         </TableRow>
 
@@ -74,55 +74,60 @@
                 android:id="@+id/b4"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/colorPrimaryDark"
                 android:text="ghi"
-                android:layout_weight="1"                android:background="@color/colorPrimaryDark"
                 android:textColor="@color/colorPrimary" />
 
             <Button
                 android:id="@+id/b5"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/colorPrimaryDark"
                 android:text="jkl"
-                android:layout_weight="1"                android:background="@color/colorPrimaryDark"
                 android:textColor="@color/colorPrimary" />
 
             <Button
                 android:id="@+id/b6"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/colorPrimaryDark"
                 android:text="mno"
-                android:layout_weight="1"                android:background="@color/colorPrimaryDark"
                 android:textColor="@color/colorPrimary" />
         </TableRow>
 
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            >
+            android:layout_weight="1">
 
             <Button
                 android:id="@+id/b7"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="pqrs"                 android:background="@color/colorPrimaryDark"
+                android:background="@color/colorPrimaryDark"
+                android:text="pqrs"
                 android:textColor="@color/colorPrimary" />
 
             <Button
-                android:layout_weight="1"
                 android:id="@+id/b8"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="tuv"                 android:background="@color/colorPrimaryDark"
+                android:layout_weight="1"
+                android:background="@color/colorPrimaryDark"
+                android:text="tuv"
                 android:textColor="@color/colorPrimary" />
 
             <Button
-                android:layout_weight="1"
                 android:id="@+id/b9"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="wxyz"                 android:background="@color/colorPrimaryDark"
+                android:layout_weight="1"
+                android:background="@color/colorPrimaryDark"
+                android:text="wxyz"
                 android:textColor="@color/colorPrimary" />
         </TableRow>
 
@@ -132,28 +137,30 @@
             android:layout_weight="0.75">
 
             <Button
-                android:layout_weight="1"
                 android:id="@+id/be1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text=""                 android:background="@color/colorPrimaryDark"
+                android:layout_weight="1"
+                android:background="@color/colorPrimaryDark"
+                android:text=""
                 android:textColor="@color/colorPrimary" />
 
             <Button
-                android:layout_weight="1"
                 android:id="@+id/be2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text=""                 android:background="@color/colorPrimaryDark"
+                android:layout_weight="1"
+                android:background="@color/colorPrimaryDark"
+                android:text=""
                 android:textColor="@color/colorPrimary" />
 
             <Button
+                android:id="@+id/be3"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@color/colorPrimaryDark"
                 android:text="BACK"
-                android:id="@+id/be3"
                 android:textColor="@color/colorPrimary" />
         </TableRow>
 

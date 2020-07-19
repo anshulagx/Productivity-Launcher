@@ -14,7 +14,7 @@
         android:paddingRight="20dp"
         android:text="Hello"
         android:textAlignment="viewEnd"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/colorPrimary"
         android:textSize="30dp" />
 
 </LinearLayout>

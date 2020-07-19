@@ -51,8 +51,16 @@ public class FragmentC extends Fragment implements View.OnClickListener {
         ((Button)view.findViewById(R.id.be1)).setOnClickListener(this);
         ((Button)view.findViewById(R.id.be2)).setOnClickListener(this);
         ((Button)view.findViewById(R.id.be3)).setOnClickListener(this);
+        ((Button)view.findViewById(R.id.be3)).setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                token="";
+                updateListWith(token);
+                return false;
+            }
+        });
 
-        appList=generateInstalledAppData();
+        appList=MainActivity.appData;
         trie=initTrie(appList);
 
         newList=new ArrayList<AppInfo>();
@@ -103,25 +111,24 @@ public class FragmentC extends Fragment implements View.OnClickListener {
                 break;
 
         }
-        String searchPrefix=token;
-        List<String> suggestions = trie.getT9ValueSuggestions(searchPrefix);
-        updateListWith(suggestions);
+        updateListWith(token);
 
-        Log.d("token:"+token,suggestions.toString());
 
     }
 
-    private void updateListWith(List<String> suggestions) {
+    private void updateListWith(String token) {
+
+        String searchPrefix=token;
+        List<String> suggestions = trie.getT9ValueSuggestions(searchPrefix);
+
         //Generate a  list of AppData with string list
         newList.clear();
         for (String s:suggestions) {
-            for (AppInfo data : appList) {
-                if (data.label.equalsIgnoreCase(s))
-                {
-                    newList.add(data);
-                }
-            }
+
+            String pkg=MainActivity.appMap.get(s);
+            newList.add(new AppInfo(s,pkg));
         }
+
         //update recycler view
         adapter.notifyDataSetChanged();
 
@@ -164,6 +171,10 @@ public class FragmentC extends Fragment implements View.OnClickListener {
 
     }
 
-
-
+    @Override
+    public void onPause() {
+        super.onPause();
+        token="";
+        updateListWith(token);
+    }
 }

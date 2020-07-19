@@ -30,7 +30,7 @@ public class FragmentB extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_b_layout, container, false);
 
-        List<AppInfo> appList=generateInstalledAppData();
+        List<AppInfo> appList=MainActivity.appData;
         appList.sort(new Comparator<AppInfo>() {
             @Override
             public int compare(AppInfo appInfo, AppInfo t1) {

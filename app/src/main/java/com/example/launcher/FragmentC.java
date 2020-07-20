@@ -1,17 +1,26 @@
 package com.example.launcher;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.telecom.TelecomManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -38,7 +47,6 @@ public class FragmentC extends Fragment implements View.OnClickListener {
         View view = inflater.inflate(R.layout.fragment_c_layout, container, false);
 
         token="";
-
         ((Button)view.findViewById(R.id.b1)).setOnClickListener(this);
         ((Button)view.findViewById(R.id.b2)).setOnClickListener(this);
         ((Button)view.findViewById(R.id.b3)).setOnClickListener(this);
@@ -48,8 +56,6 @@ public class FragmentC extends Fragment implements View.OnClickListener {
         ((Button)view.findViewById(R.id.b7)).setOnClickListener(this);
         ((Button)view.findViewById(R.id.b8)).setOnClickListener(this);
         ((Button)view.findViewById(R.id.b9)).setOnClickListener(this);
-        ((Button)view.findViewById(R.id.be1)).setOnClickListener(this);
-        ((Button)view.findViewById(R.id.be2)).setOnClickListener(this);
         ((Button)view.findViewById(R.id.be3)).setOnClickListener(this);
         ((Button)view.findViewById(R.id.be3)).setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -74,6 +80,7 @@ public class FragmentC extends Fragment implements View.OnClickListener {
         return view;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onClick(View view) {
         int id=((Button)view).getId();
@@ -111,9 +118,39 @@ public class FragmentC extends Fragment implements View.OnClickListener {
                 break;
 
         }
-        updateListWith(token);
+
+        if (token.length()==10)
+        {
+
+            makePhoneCallAt(token);
+        }
+        else
+            updateListWith(token);
 
 
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private void makePhoneCallAt(final String token) {
+        FrameLayout b=(FrameLayout) getView().findViewById(R.id.be2);
+        String defaultDialer=((TelecomManager)getActivity().getSystemService(Context.TELECOM_SERVICE)).getDefaultDialerPackage();
+        try {
+            b.setBackground(getActivity().getPackageManager().getApplicationIcon(defaultDialer));
+        }
+        catch (Exception e)
+        {}
+        b.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+
+                Intent call = new Intent(Intent.ACTION_CALL);
+                call.setData(Uri.parse("tel:" + token));
+                getActivity().startActivity(call);
+            }
+
+        });
     }
 
     private void updateListWith(String token) {
@@ -126,12 +163,32 @@ public class FragmentC extends Fragment implements View.OnClickListener {
         for (String s:suggestions) {
 
             String pkg=MainActivity.appMap.get(s);
-            newList.add(new AppInfo(s,pkg));
+            Drawable icon=null;
+            try {
+                 icon = getActivity().getPackageManager().getApplicationIcon(pkg);
+
+            }catch (Exception e)
+            {
+
+            }
+            newList.add(new AppInfo(s,pkg,icon));
+
         }
 
         //update recycler view
         adapter.notifyDataSetChanged();
 
+        //change the icon of be2 button
+        FrameLayout b=(FrameLayout) getView().findViewById(R.id.be2);
+        b.setBackground(newList.get(0).icon);
+        //add onclick listener
+        b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent launchIntent = getActivity().getPackageManager().getLaunchIntentForPackage(newList.get(0).packageName);
+                startActivity(launchIntent);
+            }
+        });
 
     }
 
@@ -150,25 +207,6 @@ public class FragmentC extends Fragment implements View.OnClickListener {
 //        List<String> suggestions = trie.getT9ValueSuggestions(searchPrefix);
 //        Log.d("TAG",suggestions.toString() );
         return trie;
-    }
-    private List<AppInfo> generateInstalledAppData() {
-        PackageManager pm = getActivity().getPackageManager();
-        List<AppInfo> appsList = new ArrayList<AppInfo>();
-
-        Intent i = new Intent(Intent.ACTION_MAIN, null);
-        i.addCategory(Intent.CATEGORY_LAUNCHER);
-
-        List<ResolveInfo> allApps = pm.queryIntentActivities(i, 0);
-        for(ResolveInfo ri:allApps) {
-            AppInfo app = new AppInfo();
-            app.label = ri.loadLabel(pm).toString();
-            app.packageName = ri.activityInfo.packageName.toString();
-            app.icon = ri.activityInfo.loadIcon(pm);
-            appsList.add(app);
-        }
-
-        return appsList;
-
     }
 
     @Override

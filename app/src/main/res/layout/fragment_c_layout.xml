@@ -8,11 +8,10 @@
 
     <FrameLayout
         android:id="@+id/frameLayout"
-        android:layout_width="375dp"
-        android:layout_height="296dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/tableLayout"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.recyclerview.widget.RecyclerView
@@ -23,13 +22,11 @@
     </FrameLayout>
 
     <TableLayout
-        android:layout_width="404dp"
-        android:layout_height="374dp"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/frameLayout">
+        android:id="@+id/tableLayout"
+        android:layout_width="413dp"
+        android:layout_height="407dp"
+        android:layout_marginBottom="30dp"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <TableRow
             android:layout_width="match_parent"
@@ -136,21 +133,23 @@
             android:layout_height="match_parent"
             android:layout_weight="0.75">
 
-            <Button
+            <FrameLayout
                 android:id="@+id/be1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_weight="5"
                 android:background="@color/colorPrimaryDark"
                 android:text=""
                 android:textColor="@color/colorPrimary" />
 
-            <Button
+            <FrameLayout
+
                 android:id="@+id/be2"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_width="40dp"
+                android:layout_height="80dp"
+                android:layout_weight="0.1"
                 android:background="@color/colorPrimaryDark"
+                android:padding="10dp"
                 android:text=""
                 android:textColor="@color/colorPrimary" />
 

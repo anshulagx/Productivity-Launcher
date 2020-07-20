@@ -105,7 +105,7 @@ public class FragmentA extends Fragment {
                         public boolean onLongClick(final View view) {
                             AlertDialog.Builder builder=new AlertDialog.Builder(getContext());
                             builder.setTitle("Settings");
-                            String options[]={"Remove from Favourite","Settings","More"};
+                            String options[]={"Remove from Favourite","Settings","Uninstall"};
                             builder.setItems(options, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
@@ -116,42 +116,30 @@ public class FragmentA extends Fragment {
 
                                     switch (i) {
                                         case 0:
+                                            //TODO
                                             //add to favourite
-
+                                            break;
                                         case 1:
                                             //settings
                                             Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                                             Uri uri = Uri.fromParts("package", MainActivity.appMap.get(option), null);
                                             intent.setData(uri);
                                             view.getContext().startActivity(intent);
-
+                                            break;
                                         case 3:
-                                            //more
+                                            //uninstall
+                                            Intent intent1=new Intent(Intent.ACTION_DELETE);
+                                            intent1.setData(Uri.parse("package:"+MainActivity.appMap.get(option)));
+                                            view.getContext().startActivity(intent1);
+                                            break;
 
                                     }
                                 }
 
-                                private String getPackageName(String name) {
-                                    //legacy
-//                                        PackageManager pm = view.getContext().getPackageManager();
-//                                        List<ApplicationInfo> l = pm.getInstalledApplications(PackageManager.GET_META_DATA);
-//                                        String packName = "";
-//                                        for (ApplicationInfo ai : l) {
-//                                            String n = (String)pm.getApplicationLabel(ai);
-//                                            if (n.contains(name) || name.contains(n)){
-//                                                packName = ai.packageName;
-//                                            }
-//                                        }
-                                    String packName=MainActivity.appMap.get("name");
-
-                                        return packName;
-
-
-                                }
 
                             });
 
-                               AlertDialog dialog=builder.create();
+                            AlertDialog dialog=builder.create();
                             dialog.show();
 
                             return false;

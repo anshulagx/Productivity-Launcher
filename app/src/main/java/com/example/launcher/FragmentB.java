@@ -53,25 +53,6 @@ public class FragmentB extends Fragment {
 
     }
 
-    private List<AppInfo> generateInstalledAppData() {
-        PackageManager pm = getActivity().getPackageManager();
-        List<AppInfo> appsList = new ArrayList<AppInfo>();
-
-        Intent i = new Intent(Intent.ACTION_MAIN, null);
-        i.addCategory(Intent.CATEGORY_LAUNCHER);
-
-        List<ResolveInfo> allApps = pm.queryIntentActivities(i, 0);
-        for(ResolveInfo ri:allApps) {
-            AppInfo app = new AppInfo();
-            app.label = ri.loadLabel(pm).toString();
-            app.packageName = ri.activityInfo.packageName.toString();
-            app.icon = ri.activityInfo.loadIcon(pm);
-            appsList.add(app);
-        }
-
-        return appsList;
-
-    }
 
 
 }

@@ -64,7 +64,7 @@ public class FragmentB_RecyclerViewAdapter extends RecyclerView.Adapter<Fragment
             public boolean onLongClick(final View view) {
                 AlertDialog.Builder builder=new AlertDialog.Builder(view.getContext());
                 builder.setTitle("Settings");
-                String options[]={"Add to Favourite","Settings","Uninstall","More"};
+                String options[]={"Add to Favourite","Settings","Uninstall"};
                 builder.setItems(options, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -75,35 +75,25 @@ public class FragmentB_RecyclerViewAdapter extends RecyclerView.Adapter<Fragment
                         {
                             case 0:
                                 //add to favourite
-
+                                //TODO
+                                break;
                             case 1:
                                 //settings
                                 Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                                 Uri uri = Uri.fromParts("package", MainActivity.appMap.get(option), null);
                                 intent.setData(uri);
                                 view.getContext().startActivity(intent);
+                                break;
                             case 3:
                                 //uninstall
-                            case 4:
-                                //more
+                                Intent intent1=new Intent(Intent.ACTION_DELETE);
+                                intent1.setData(Uri.parse("package:"+MainActivity.appMap.get(option)));
+                                view.getContext().startActivity(intent1);
+                                break;
 
                         }
                     }
 
-                    private String getPackageName(String name) {
-                        PackageManager pm = view.getContext().getPackageManager();
-                        List<ApplicationInfo> l = pm.getInstalledApplications(PackageManager.GET_META_DATA);
-                        String packName = "";
-                        for (ApplicationInfo ai : l) {
-                            String n = (String)pm.getApplicationLabel(ai);
-                            if (n.contains(name) || name.contains(n)){
-                                packName = ai.packageName;
-                            }
-                        }
-
-                        return packName;
-
-                    }
                 });
                 AlertDialog dialog=builder.create();
                 dialog.show();

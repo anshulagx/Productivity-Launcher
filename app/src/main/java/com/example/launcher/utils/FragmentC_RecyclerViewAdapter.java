@@ -1,10 +1,12 @@
 package com.example.launcher.utils;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
 import android.provider.Settings;
 import android.view.LayoutInflater;
@@ -54,60 +56,81 @@ public class FragmentC_RecyclerViewAdapter extends RecyclerView.Adapter<Fragment
 
 
 
+    @SuppressLint("ResourceAsColor")
     @Override
     public void onBindViewHolder(@NonNull final FragmentC_RecyclerViewAdapter.MyViewHolder holder, final int position) {
         holder.textView.setText(appData.get(position).label);
         holder.textView.setTextSize(20);
 
-        holder.linearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent launchIntent = view.getContext().getPackageManager().getLaunchIntentForPackage(appData.get(position).packageName);
-                view.getContext().startActivity(launchIntent);
-            }
-        });
-        holder.linearLayout.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(final View view) {
-                AlertDialog.Builder builder=new AlertDialog.Builder(view.getContext());
-                builder.setTitle("Settings");
-                String options[]={"Add to Favourite","Settings","Uninstall"};
-                builder.setItems(options, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        TextView txt=(TextView)view.findViewById(R.id.itemText);
-                        String option=txt.getText().toString();
+        //if data is an contact do this
+        if(appData.get(position).isContact)
+        {
 
-                        switch (i)
-                        {
-                            case 0:
-                                //add to favourite
-                                //TODO
-                                break;
-                            case 1:
-                                //settings
-                                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                                Uri uri = Uri.fromParts("package", MainActivity.appMap.get(option), null);
-                                intent.setData(uri);
-                                view.getContext().startActivity(intent);
-                                break;
-                            case 3:
-                                //uninstall
-                                Intent intent1=new Intent(Intent.ACTION_DELETE);
-                                intent1.setData(Uri.parse("package:"+ MainActivity.appMap.get(option)));
-                                view.getContext().startActivity(intent1);
-                                break;
+            holder.textView.setTextColor(Color.GRAY);
+            holder.textView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
 
+                    Intent call = new Intent(Intent.ACTION_CALL);
+                    call.setData(Uri.parse("tel:" + appData.get(position).contactNo));
+                    view.getContext().startActivity(call);
+                }
+            });
+        }
+        //else that data is an app
+        else
+        {
+            holder.linearLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent launchIntent = view.getContext().getPackageManager().getLaunchIntentForPackage(appData.get(position).packageName);
+                    view.getContext().startActivity(launchIntent);
+                }
+            });
+            holder.linearLayout.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(final View view) {
+                    AlertDialog.Builder builder=new AlertDialog.Builder(view.getContext());
+                    builder.setTitle("Settings");
+                    String options[]={"Add to Favourite","Settings","Uninstall"};
+                    builder.setItems(options, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            TextView txt=(TextView)view.findViewById(R.id.itemText);
+                            String option=txt.getText().toString();
+
+                            switch (i)
+                            {
+                                case 0:
+                                    //add to favourite
+                                    //TODO
+                                    break;
+                                case 1:
+                                    //settings
+                                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                    Uri uri = Uri.fromParts("package", MainActivity.appMap.get(option), null);
+                                    intent.setData(uri);
+                                    view.getContext().startActivity(intent);
+                                    break;
+                                case 3:
+                                    //uninstall
+                                    Intent intent1=new Intent(Intent.ACTION_DELETE);
+                                    intent1.setData(Uri.parse("package:"+ MainActivity.appMap.get(option)));
+                                    view.getContext().startActivity(intent1);
+                                    break;
+
+                            }
                         }
-                    }
 
-                });
-                AlertDialog dialog=builder.create();
-                dialog.show();
+                    });
+                    AlertDialog dialog=builder.create();
+                    dialog.show();
 
-                return false;
-            }
-        });
+                    return false;
+                }
+            });
+
+        }
 
     }
 

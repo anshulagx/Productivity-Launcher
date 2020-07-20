@@ -2,10 +2,6 @@ package com.example.launcher;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
@@ -28,17 +24,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.launcher.t9search.T9Trie;
 import com.example.launcher.utils.AppInfo;
-import com.example.launcher.utils.FragmentB_RecyclerViewAdapter;
 import com.example.launcher.utils.FragmentC_RecyclerViewAdapter;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class FragmentC extends Fragment implements View.OnClickListener {
 
     static String token;
     List<AppInfo> appList;
+    Map<String,String> contactsInfoMap;
     T9Trie<String> trie;
     RecyclerView.Adapter adapter;
     List<AppInfo> newList;
@@ -68,13 +65,16 @@ public class FragmentC extends Fragment implements View.OnClickListener {
         });
 
         appList=MainActivity.appData;
-        trie=initTrie(appList);
+        contactsInfoMap=MainActivity.contactInfoMap;
+
+        trie=initTrie(appList,contactsInfoMap);
 
         newList=new ArrayList<AppInfo>();
 
         RecyclerView recyclerView=(RecyclerView)view.findViewById(R.id.search_recycler_view);
         RecyclerView.LayoutManager layoutManager=new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
+
         adapter=new FragmentC_RecyclerViewAdapter(newList);
         recyclerView.setAdapter(adapter);
 
@@ -157,6 +157,7 @@ public class FragmentC extends Fragment implements View.OnClickListener {
         });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     private void updateListWith(String token) {
 
         String searchPrefix=token;
@@ -166,16 +167,34 @@ public class FragmentC extends Fragment implements View.OnClickListener {
         newList.clear();
         for (String s:suggestions) {
 
-            String pkg=MainActivity.appMap.get(s);
-            Drawable icon=null;
-            try {
-                 icon = getActivity().getPackageManager().getApplicationIcon(pkg);
-
-            }catch (Exception e)
+            if(MainActivity.appMap.containsKey(s))
             {
+                //implies that the string is an app
+                String pkg=MainActivity.appMap.get(s);
+                Drawable icon=null;
+                try {
+                    icon = getActivity().getPackageManager().getApplicationIcon(pkg);
+
+                }catch (Exception e)
+                {
+
+                }
+                newList.add(new AppInfo(s,pkg,icon));
+            }
+            else
+            {
+                //the string is a Contact
+                String number=MainActivity.contactInfoMap.get(s);
+                AppInfo info=new AppInfo();
+                info.isContact();
+                info.label=s;
+                info.contactNo=number;
+
+                Log.d("TAG2", number);
+                newList.add(info);
 
             }
-            newList.add(new AppInfo(s,pkg,icon));
+
 
         }
 
@@ -184,19 +203,43 @@ public class FragmentC extends Fragment implements View.OnClickListener {
 
         //change the icon of be2 button
         FrameLayout b=(FrameLayout) getView().findViewById(R.id.be2);
-        b.setBackground(newList.get(0).icon);
-        //add onclick listener
-        b.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent launchIntent = getActivity().getPackageManager().getLaunchIntentForPackage(newList.get(0).packageName);
-                startActivity(launchIntent);
+
+        if(newList.get(0).isContact)
+        {
+            String defaultDialer=((TelecomManager)getActivity().getSystemService(Context.TELECOM_SERVICE)).getDefaultDialerPackage();
+            try {
+                b.setBackground(getActivity().getPackageManager().getApplicationIcon(defaultDialer));
+
             }
-        });
+            catch (Exception e){}
+            //add onclick listener
+            b.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent call = new Intent(Intent.ACTION_CALL);
+                    Log.d("TAG1", "tel:" + newList.get(0).contactNo);
+                    call.setData(Uri.parse("tel:" + newList.get(0).contactNo));
+                    getActivity().startActivity(call);
+                }
+            });
+        }
+        else
+        {
+            b.setBackground(newList.get(0).icon);
+            //add onclick listener
+            b.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent launchIntent = getActivity().getPackageManager().getLaunchIntentForPackage(newList.get(0).packageName);
+                    startActivity(launchIntent);
+                }
+            });
+        }
+
 
     }
 
-    private T9Trie<String> initTrie(List<AppInfo> appList){
+    private T9Trie<String> initTrie(List<AppInfo> appList, Map<String, String> contactInfoMap){
 
         //String searchPrefix="42";
 
@@ -207,9 +250,15 @@ public class FragmentC extends Fragment implements View.OnClickListener {
             l.add(app.label);
             trie.insert(app.label, l);
         }
+
+
+        for(Map.Entry<String,String> ci:contactInfoMap.entrySet())
+        {
+            LinkedList<String> l=new LinkedList<String>();
+            l.add(ci.getKey());
+            trie.insert(ci.getKey(), l);
+        }
         trie.print();
-//        List<String> suggestions = trie.getT9ValueSuggestions(searchPrefix);
-//        Log.d("TAG",suggestions.toString() );
         return trie;
     }
 
@@ -217,6 +266,9 @@ public class FragmentC extends Fragment implements View.OnClickListener {
     public void onPause() {
         super.onPause();
         token="";
+        TextView t=((TextView)getView().findViewById(R.id.tokenDisplay));
+        t.setText("");
+
         updateListWith(token);
     }
 }

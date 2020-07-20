@@ -22,11 +22,11 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
         switch (position)
         {
             case 0:
-                return new FragmentC();
+                return new FragmentB();
             case 1:
                 return new FragmentA();
             case 2:
-                return new FragmentB();
+                return new FragmentC();
         }
         return new FragmentA();
     }

@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -118,6 +119,9 @@ public class FragmentC extends Fragment implements View.OnClickListener {
                 break;
 
         }
+
+        TextView t=((TextView)getView().findViewById(R.id.tokenDisplay));
+        t.setText(token);
 
         if (token.length()==10)
         {

@@ -140,7 +140,18 @@
                 android:layout_weight="5"
                 android:background="@color/colorPrimaryDark"
                 android:text=""
-                android:textColor="@color/colorPrimary" />
+                android:textColor="@color/colorPrimary">
+
+                <TextView
+                    android:id="@+id/tokenDisplay"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingLeft="50dp"
+                    android:paddingTop="30dp"
+                    android:text="123456789"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="24sp" />
+            </FrameLayout>
 
             <FrameLayout
 

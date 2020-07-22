@@ -1,31 +1,40 @@
 package com.example.launcher;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.MotionEventCompat;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
+import android.view.View;
 
 import com.example.launcher.utils.AppInfo;
 import com.example.launcher.utils.ViewPagerAdapter;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity  {
 
     public static String favApps[]={"Phone","Google"};
 
     public static List<AppInfo> appData;
     public static HashMap<String, String> appMap;
 
-
+    public static Context context;
     public static HashMap<String, String> contactInfoMap;
 
     ViewPager mPager;
@@ -47,7 +56,28 @@ public class MainActivity extends AppCompatActivity {
 
         getContacts();
 
+        // get the gesture detector
+        mDetector = new GestureDetector(this, new MyGestureListener());
+
+        // Add a touch listener to the view
+        // The touch listener passes all its events on to the gesture detector
+        context=getApplicationContext();
+        mPager.setOnTouchListener(touchListener);
+
+
     }
+    GestureDetector mDetector;
+    View.OnTouchListener touchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            // pass the events to the gesture detector
+            // a return value of true means the detector is handling it
+            // a return value of false means the detector didn't
+            // recognize the event
+            return mDetector.onTouchEvent(event);
+
+        }
+    };
     @Override
     protected void onStart() {
         super.onStart();
@@ -115,5 +145,40 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
 }
+
+// In the SimpleOnGestureListener subclass you should override
+// onDown and any other gesture that you want to detect.
+class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
+
+
+
+    @Override
+    public boolean onFling(MotionEvent event1, MotionEvent event2,
+                           float velocityX, float velocityY) {
+        //Log.d("TAG", "onFling: ");
+        //Log.d("vx", "onFling: "+velocityX);
+        //Log.d("vy", "onFling: "+velocityY);
+        if(velocityY>10000)
+        {
+            //open notification
+            Log.d("TAG", "Open notification shade");
+
+            try {Object sbservice = MainActivity.context.getSystemService( "statusbar" );
+                Class<?> statusbarManager = Class.forName( "android.app.StatusBarManager" );
+                Method showsb;
+                if (Build.VERSION.SDK_INT >= 17) {
+                    showsb = statusbarManager.getMethod("expandNotificationsPanel");
+                }
+                else {
+                    showsb = statusbarManager.getMethod("expand");
+                }
+                showsb.invoke( sbservice );
+            }catch (Exception e){
+                Log.e("TAG", e.getMessage());
+            }
+        }
+        return false;
+    }
+}
+

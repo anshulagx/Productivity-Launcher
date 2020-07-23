@@ -84,7 +84,7 @@ public class FragmentB_RecyclerViewAdapter extends RecyclerView.Adapter<Fragment
                                 intent.setData(uri);
                                 view.getContext().startActivity(intent);
                                 break;
-                            case 3:
+                            case 2:
                                 //uninstall
                                 Intent intent1=new Intent(Intent.ACTION_DELETE);
                                 intent1.setData(Uri.parse("package:"+MainActivity.appMap.get(option)));

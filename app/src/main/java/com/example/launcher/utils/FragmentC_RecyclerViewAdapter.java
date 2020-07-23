@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,8 +67,9 @@ public class FragmentC_RecyclerViewAdapter extends RecyclerView.Adapter<Fragment
         if(appData.get(position).isContact)
         {
 
+
             holder.textView.setTextColor(Color.GRAY);
-            holder.textView.setOnClickListener(new View.OnClickListener() {
+            holder.linearLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
@@ -80,6 +82,7 @@ public class FragmentC_RecyclerViewAdapter extends RecyclerView.Adapter<Fragment
         //else that data is an app
         else
         {
+            holder.textView.setTextColor(Color.WHITE);
             holder.linearLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -112,8 +115,9 @@ public class FragmentC_RecyclerViewAdapter extends RecyclerView.Adapter<Fragment
                                     intent.setData(uri);
                                     view.getContext().startActivity(intent);
                                     break;
-                                case 3:
+                                case 2:
                                     //uninstall
+                                    Log.d("TAG", "onClick: delete"+option+" "+MainActivity.appMap.get(option));
                                     Intent intent1=new Intent(Intent.ACTION_DELETE);
                                     intent1.setData(Uri.parse("package:"+ MainActivity.appMap.get(option)));
                                     view.getContext().startActivity(intent1);

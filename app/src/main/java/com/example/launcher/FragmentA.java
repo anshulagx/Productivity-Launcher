@@ -155,7 +155,7 @@ public class FragmentA extends Fragment  {
         ((FrameLayout)view.findViewById(R.id.widgetFrame)).removeAllViews();
         ((FrameLayout)view.findViewById(R.id.widgetFrame)).addView(hostView);
 
-        Log.i("TAG", "The widget size is: " + appWidgetInfo.minWidth + "*" + appWidgetInfo.minHeight);
+//        Log.i("TAG", "The widget size is: " + appWidgetInfo.minWidth + "*" + appWidgetInfo.minHeight);
 
     }
 

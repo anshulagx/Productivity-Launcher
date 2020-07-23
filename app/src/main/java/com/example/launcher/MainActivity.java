@@ -1,9 +1,13 @@
 package com.example.launcher;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.MotionEventCompat;
 import androidx.viewpager.widget.ViewPager;
 
+import android.Manifest;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -17,6 +21,7 @@ import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.launcher.utils.AppInfo;
 import com.example.launcher.utils.ViewPagerAdapter;
@@ -37,11 +42,23 @@ public class MainActivity extends AppCompatActivity  {
     public static Context context;
     public static HashMap<String, String> contactInfoMap;
 
+    public boolean hasPermission;
+
     ViewPager mPager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //permission stuff
+        hasPermission=false;
+        checkPermission(Manifest.permission.CALL_PHONE,Manifest.permission.READ_CONTACTS,30,20);
+
+        //doStuff();
+
+    }
+    void doStuff()
+    {
 
         mPager = (ViewPager) findViewById(R.id.mainFrame);
         ViewPagerAdapter mPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
@@ -53,27 +70,18 @@ public class MainActivity extends AppCompatActivity  {
         appData=generateInstalledAppData();
 
         contactInfoMap=new HashMap<String, String>();
-
         getContacts();
 
-        // get the gesture detector
+        // get the gesture detector for pull down notification
         mDetector = new GestureDetector(this, new MyGestureListener());
-
-        // Add a touch listener to the view
-        // The touch listener passes all its events on to the gesture detector
         context=getApplicationContext();
         mPager.setOnTouchListener(touchListener);
-
 
     }
     GestureDetector mDetector;
     View.OnTouchListener touchListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
-            // pass the events to the gesture detector
-            // a return value of true means the detector is handling it
-            // a return value of false means the detector didn't
-            // recognize the event
             return mDetector.onTouchEvent(event);
 
         }
@@ -81,7 +89,9 @@ public class MainActivity extends AppCompatActivity  {
     @Override
     protected void onStart() {
         super.onStart();
-        mPager.setCurrentItem(1);
+        if(hasPermission) {
+            mPager.setCurrentItem(1);
+        }
     }
     private List<AppInfo> generateInstalledAppData() {
         PackageManager pm = getPackageManager();
@@ -142,13 +152,55 @@ public class MainActivity extends AppCompatActivity  {
         cursor.close();
 
     }
+    // Function to check and request permission.
+    public void checkPermission(String permission1,String permission2, int requestCode1,int requestCode2)
+    {
+        if (ContextCompat.checkSelfPermission(MainActivity.this, permission1)
+                == PackageManager.PERMISSION_DENIED) {
+            // Requesting the permission
+            ActivityCompat.requestPermissions(MainActivity.this,
+                    new String[] { permission1 },
+                    requestCode1);
+        }
+        if( ContextCompat.checkSelfPermission(MainActivity.this, permission2)
+            == PackageManager.PERMISSION_DENIED){
+            // Requesting the permission
+            ActivityCompat.requestPermissions(MainActivity.this,
+                    new String[] { permission2 },
+                    requestCode2);
+        }
 
+        if(ContextCompat.checkSelfPermission(MainActivity.this, permission2)
+                == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(MainActivity.this, permission2)
+                == PackageManager.PERMISSION_GRANTED)
+            {
+            doStuff();
+            hasPermission=true;
+        }
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode,@NonNull String[] permissions,@NonNull int[] grantResults)
+    {
+        super.onRequestPermissionsResult(requestCode,permissions,grantResults);
+
+        if (requestCode == 30 || requestCode==20) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                hasPermission=true;
+                doStuff();
+
+            }
+            else {
+                hasPermission=false;
+                Toast.makeText(MainActivity.this,"Permission Denied",Toast.LENGTH_SHORT)
+                        .show();
+            }
+        }
+
+    }
 
 
 }
 
-// In the SimpleOnGestureListener subclass you should override
-// onDown and any other gesture that you want to detect.
 class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
 
 

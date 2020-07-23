@@ -190,7 +190,6 @@ public class FragmentC extends Fragment implements View.OnClickListener {
                 info.label=s;
                 info.contactNo=number;
 
-                Log.d("TAG2", number);
                 newList.add(info);
 
             }
@@ -217,7 +216,6 @@ public class FragmentC extends Fragment implements View.OnClickListener {
                 @Override
                 public void onClick(View view) {
                     Intent call = new Intent(Intent.ACTION_CALL);
-                    Log.d("TAG1", "tel:" + newList.get(0).contactNo);
                     call.setData(Uri.parse("tel:" + newList.get(0).contactNo));
                     getActivity().startActivity(call);
                 }

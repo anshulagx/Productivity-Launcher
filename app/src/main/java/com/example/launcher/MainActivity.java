@@ -8,6 +8,7 @@ import androidx.core.view.MotionEventCompat;
 import androidx.viewpager.widget.ViewPager;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -34,7 +35,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity  {
 
-    public static String favApps[]={"Phone","Google"};
+    public static String favApps[]={"Google"};
 
     public static List<AppInfo> appData;
     public static HashMap<String, String> appMap;
@@ -42,7 +43,7 @@ public class MainActivity extends AppCompatActivity  {
     public static Context context;
     public static HashMap<String, String> contactInfoMap;
 
-    public boolean hasPermission;
+    boolean hasPermission;
 
     ViewPager mPager;
     @Override
@@ -54,23 +55,20 @@ public class MainActivity extends AppCompatActivity  {
         hasPermission=false;
         checkPermission(Manifest.permission.CALL_PHONE,Manifest.permission.READ_CONTACTS,30,20);
 
-        //doStuff();
 
     }
-    void doStuff()
+    private void doStuff()
     {
+
+        //to be used elsewhere
+        appData=generateInstalledAppData();//appMAp is also initaializec here
+        contactInfoMap=generateContactsData();
 
         mPager = (ViewPager) findViewById(R.id.mainFrame);
         ViewPagerAdapter mPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         mPager.setAdapter(mPagerAdapter);
         mPager.setCurrentItem(1);
 
-        //to be used elsewhere
-        appMap = new HashMap<String, String>();
-        appData=generateInstalledAppData();
-
-        contactInfoMap=new HashMap<String, String>();
-        getContacts();
 
         // get the gesture detector for pull down notification
         mDetector = new GestureDetector(this, new MyGestureListener());
@@ -94,6 +92,7 @@ public class MainActivity extends AppCompatActivity  {
         }
     }
     private List<AppInfo> generateInstalledAppData() {
+        appMap=new HashMap<String,String>();
         PackageManager pm = getPackageManager();
         List<AppInfo> appsList = new ArrayList<AppInfo>();
 
@@ -115,7 +114,8 @@ public class MainActivity extends AppCompatActivity  {
 
     }
 
-    private void getContacts(){
+    private HashMap<String, String> generateContactsData(){
+        HashMap<String,String> contactInfoMap =new HashMap<String, String>();
         ContentResolver contentResolver = getContentResolver();
         String contactId = null;
         String displayName = null;
@@ -136,7 +136,7 @@ public class MainActivity extends AppCompatActivity  {
                             ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
                             new String[]{contactId},
                             null);
-                    String phoneNumber="";
+                    String phoneNumber = "";
                     if (phoneCursor.moveToNext()) {
                         phoneNumber = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
 
@@ -145,15 +145,15 @@ public class MainActivity extends AppCompatActivity  {
                     phoneCursor.close();
 
                     //contactsInfoList.add(contactsInfo);
-                    contactInfoMap.put(displayName,phoneNumber);
+                    contactInfoMap.put(displayName, phoneNumber);
                 }
             }
         }
         cursor.close();
-
+    return contactInfoMap;
     }
     // Function to check and request permission.
-    public void checkPermission(String permission1,String permission2, int requestCode1,int requestCode2)
+    private void checkPermission(String permission1,String permission2, int requestCode1,int requestCode2)
     {
         if (ContextCompat.checkSelfPermission(MainActivity.this, permission1)
                 == PackageManager.PERMISSION_DENIED) {
@@ -216,7 +216,8 @@ class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
             //open notification
             Log.d("TAG", "Open notification shade");
 
-            try {Object sbservice = MainActivity.context.getSystemService( "statusbar" );
+            try {
+                @SuppressLint("WrongConstant") Object sbservice = MainActivity.context.getSystemService( "statusbar" );
                 Class<?> statusbarManager = Class.forName( "android.app.StatusBarManager" );
                 Method showsb;
                 if (Build.VERSION.SDK_INT >= 17) {

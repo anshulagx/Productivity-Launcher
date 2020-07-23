@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Launcher</string>
+
+    <string name="fav1">Favourite 1</string>
+    <string name="fav2">Favourite 2</string>
+    <string name="fav3">Favourite 3</string>
+    <string name="fav4">Favourite 4</string>
+
 </resources>

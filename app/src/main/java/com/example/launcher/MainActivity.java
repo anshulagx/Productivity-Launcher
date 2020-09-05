@@ -35,7 +35,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity  {
 
-    public static String favApps[]={"Google"};
+    public static String favApps[]={"Keep notes"};
 
     public static List<AppInfo> appData;
     public static HashMap<String, String> appMap;

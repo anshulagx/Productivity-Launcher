@@ -148,6 +148,7 @@
                     android:layout_height="match_parent"
                     android:paddingLeft="50dp"
                     android:paddingTop="30dp"
+                    android:text="0"
                     android:textColor="@color/colorPrimary"
                     android:textSize="24sp" />
             </FrameLayout>

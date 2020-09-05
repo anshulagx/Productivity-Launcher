@@ -213,7 +213,6 @@ public class FragmentA extends Fragment  {
 //    }
 
 
-
     @Override public void onStart() {
         super.onStart();
         mAppWidgetHost.startListening();
@@ -222,6 +221,5 @@ public class FragmentA extends Fragment  {
         super.onStop();
         mAppWidgetHost.stopListening();
     }
-
 
 }

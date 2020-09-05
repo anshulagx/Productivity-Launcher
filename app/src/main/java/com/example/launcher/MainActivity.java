@@ -35,7 +35,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity  {
 
-    public static String favApps[]={"Keep notes"};
+    public static String favApps[]={"Google"};
 
     public static List<AppInfo> appData;
     public static HashMap<String, String> appMap;
@@ -211,7 +211,7 @@ class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
         //Log.d("TAG", "onFling: ");
         //Log.d("vx", "onFling: "+velocityX);
         //Log.d("vy", "onFling: "+velocityY);
-        if(velocityY>10000)
+        if(velocityY>8000)
         {
             //open notification
             Log.d("TAG", "Open notification shade");

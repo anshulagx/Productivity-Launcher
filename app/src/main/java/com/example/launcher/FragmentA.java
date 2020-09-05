@@ -9,34 +9,28 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProviderInfo;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.launcher.utils.AppInfo;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class FragmentA extends Fragment  {
 
 
     View view;
-    final int displayWidgetid=38;
+     int displayWidgetid;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState)
     {
@@ -49,8 +43,15 @@ public class FragmentA extends Fragment  {
         handelFavButtons(appList,MainActivity.favApps,view);
 
         //everything about widgets in Fragment A
-        setCalenderWidget(displayWidgetid);//38 is default for calendar app widget
+        SharedPreferences sharedPref= PreferenceManager.getDefaultSharedPreferences(getContext());
+        int widgetId = sharedPref.getInt("defaultWidget",-1);
 
+        if(widgetId==-1)
+            selectWidget();
+        else {
+            displayWidgetid=widgetId;
+            setDefaultWidget(displayWidgetid);//38 is default for calendar app widget
+        }
         return view;
     }
 
@@ -140,13 +141,13 @@ public class FragmentA extends Fragment  {
     AppWidgetManager mAppWidgetManager;
     AppWidgetHost mAppWidgetHost;
     private int APPWIDGET_HOST_ID = 1;
-//    private int REQUEST_PICK_APPWIDGET = 2;
-//    private int REQUEST_CREATE_APPWIDGET = 3;
+    private int REQUEST_PICK_APPWIDGET = 2;
+    private int REQUEST_CREATE_APPWIDGET = 3;
     private void initWidgetHost() {
         mAppWidgetManager = AppWidgetManager.getInstance(getContext().getApplicationContext());
         mAppWidgetHost = new AppWidgetHost(getContext().getApplicationContext(), APPWIDGET_HOST_ID);
     }
-    private void setCalenderWidget(int appWidgetId) {
+    private void setDefaultWidget(int appWidgetId) {
         initWidgetHost();
         AppWidgetProviderInfo appWidgetInfo = mAppWidgetManager.getAppWidgetInfo(appWidgetId);
         AppWidgetHostView hostView =
@@ -159,58 +160,66 @@ public class FragmentA extends Fragment  {
 
     }
 
-//    void selectWidget() {
-//        int appWidgetId = this.mAppWidgetHost.allocateAppWidgetId();
-//        Intent pickIntent = new Intent(AppWidgetManager.ACTION_APPWIDGET_PICK);
-//        pickIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-//        startActivityForResult(pickIntent, REQUEST_PICK_APPWIDGET);
-//    }
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if (resultCode == getActivity().RESULT_OK) {
-//            if (requestCode == REQUEST_PICK_APPWIDGET) {
-//                configureWidget(data);
-//            }
-//            else if (requestCode == REQUEST_CREATE_APPWIDGET) {
-//                createWidget(data);
-//            }
-//        }
-//        else if (resultCode == getActivity().RESULT_CANCELED && data != null) {
-//            int appWidgetId = data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, -1);
-//            if (appWidgetId != -1) {
-//                mAppWidgetHost.deleteAppWidgetId(appWidgetId);
-//            }
-//        }
-//    }
-//    private void configureWidget(Intent data) {
-//        Bundle extras = data.getExtras();
-//        int appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, -1);
-//        Log.d("TAG", "configureWidget: "+appWidgetId);
-//        AppWidgetProviderInfo appWidgetInfo = mAppWidgetManager.getAppWidgetInfo(appWidgetId);
-//        if (appWidgetInfo.configure != null) {
-//            Intent intent = new Intent(AppWidgetManager.ACTION_APPWIDGET_CONFIGURE);
-//            intent.setComponent(appWidgetInfo.configure);
-//            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-//            startActivityForResult(intent, REQUEST_CREATE_APPWIDGET);
-//        } else {
-//            createWidget(data);
-//        }
-//    }
-//    public void createWidget(Intent data) {
-//        Bundle extras = data.getExtras();
-//        int appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, -1);
-//
-//        AppWidgetProviderInfo appWidgetInfo = mAppWidgetManager.getAppWidgetInfo(appWidgetId);
-//
-//        AppWidgetHostView hostView =
-//                mAppWidgetHost.createView(getContext().getApplicationContext(), appWidgetId, appWidgetInfo);
-//        hostView.setAppWidget(appWidgetId, appWidgetInfo);
-//        ((FrameLayout)view.findViewById(R.id.widgetFrame)).removeAllViews();
-//        ((FrameLayout)view.findViewById(R.id.widgetFrame)).addView(hostView);
-//
-//        Log.i("TAG", "The widget size is: " + appWidgetInfo.minWidth + "*" + appWidgetInfo.minHeight);
-//    }
+    void selectWidget() {
+        initWidgetHost();
+        int appWidgetId = this.mAppWidgetHost.allocateAppWidgetId();
+        Intent pickIntent = new Intent(AppWidgetManager.ACTION_APPWIDGET_PICK);
+        pickIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+        startActivityForResult(pickIntent, REQUEST_PICK_APPWIDGET);
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == getActivity().RESULT_OK) {
+            if (requestCode == REQUEST_PICK_APPWIDGET) {
+                configureWidget(data);
+            }
+            else if (requestCode == REQUEST_CREATE_APPWIDGET) {
+                createWidget(data);
+            }
+        }
+        else if (resultCode == getActivity().RESULT_CANCELED && data != null) {
+            int appWidgetId = data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, -1);
+            if (appWidgetId != -1) {
+                mAppWidgetHost.deleteAppWidgetId(appWidgetId);
+            }
+        }
+    }
+    private void configureWidget(Intent data) {
+        Bundle extras = data.getExtras();
+        int appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, -1);
+
+        SharedPreferences sharedPref= PreferenceManager.getDefaultSharedPreferences(getContext());
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt("defaultWidget", appWidgetId);
+        editor.commit();
+
+
+        Log.d("TAG", "configureWidget: "+appWidgetId);
+        AppWidgetProviderInfo appWidgetInfo = mAppWidgetManager.getAppWidgetInfo(appWidgetId);
+        if (appWidgetInfo.configure != null) {
+            Intent intent = new Intent(AppWidgetManager.ACTION_APPWIDGET_CONFIGURE);
+            intent.setComponent(appWidgetInfo.configure);
+            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+            startActivityForResult(intent, REQUEST_CREATE_APPWIDGET);
+        } else {
+            createWidget(data);
+        }
+    }
+    public void createWidget(Intent data) {
+        Bundle extras = data.getExtras();
+        int appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, -1);
+
+        AppWidgetProviderInfo appWidgetInfo = mAppWidgetManager.getAppWidgetInfo(appWidgetId);
+
+        AppWidgetHostView hostView =
+                mAppWidgetHost.createView(getContext().getApplicationContext(), appWidgetId, appWidgetInfo);
+        hostView.setAppWidget(appWidgetId, appWidgetInfo);
+        ((FrameLayout)view.findViewById(R.id.widgetFrame)).removeAllViews();
+        ((FrameLayout)view.findViewById(R.id.widgetFrame)).addView(hostView);
+
+        Log.i("TAG", "The widget size is: " + appWidgetInfo.minWidth + "*" + appWidgetInfo.minHeight);
+    }
 
 
     @Override public void onStart() {

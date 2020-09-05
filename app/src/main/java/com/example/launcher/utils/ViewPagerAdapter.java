@@ -12,7 +12,7 @@ import com.example.launcher.FragmentD;
 
 public class ViewPagerAdapter extends FragmentPagerAdapter {
 
-    static final int NUM_PAGES=4;
+    static final int NUM_PAGES=2;
 
     public ViewPagerAdapter(FragmentManager fm) {
         super(fm);
@@ -25,12 +25,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
             case 0:
                 return new FragmentD();
             case 1:
-                return new FragmentA();
-            case 2:
                 return new FragmentC();
-            case 3:
-                return new FragmentB();
-
         }
         return new FragmentA();
     }

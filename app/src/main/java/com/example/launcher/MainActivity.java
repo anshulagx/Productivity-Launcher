@@ -9,6 +9,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -60,15 +61,31 @@ public class MainActivity extends AppCompatActivity  {
     private void doStuff()
     {
 
+        ProgressDialog progress = new ProgressDialog(this);
+        progress.setTitle("Loading");
+        progress.setMessage("Wait while loading...");
+        progress.setCancelable(false); // disable dismiss by tapping outside of the dialog
+        progress.show();
+        Log.d(" TAG pos:", "1");
+
         //to be used elsewhere
-        appData=generateInstalledAppData();//appMAp is also initaializec here
+        appData=generateInstalledAppData();//appMAp is also initaialize here
         contactInfoMap=generateContactsData();
+
+        Log.d(" TAG pos:", "2");
 
         mPager = (ViewPager) findViewById(R.id.mainFrame);
         ViewPagerAdapter mPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        mPager.setAdapter(mPagerAdapter);
-        mPager.setCurrentItem(1);
+        Log.d(" TAG pos:", "3");
 
+        mPager.setAdapter(mPagerAdapter);
+        Log.d(" TAG pos:", "4");
+
+        mPager.setCurrentItem(1);
+        Log.d(" TAG pos:", "5");
+
+        progress.dismiss();
+        Log.d(" TAG pos:", "6");
 
         // get the gesture detector for pull down notification
         mDetector = new GestureDetector(this, new MyGestureListener());

@@ -132,12 +132,19 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="0.75">
-
+            <Button
+                android:id="@+id/b0"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/colorPrimaryDark"
+                android:text=""
+                android:textColor="@color/colorPrimary" />
             <FrameLayout
                 android:id="@+id/be1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="5"
+                android:layout_weight="1"
                 android:background="@color/colorPrimaryDark"
                 android:text=""
                 android:textColor="@color/colorPrimary">
@@ -151,21 +158,14 @@
                     android:textColor="@color/colorPrimary"
                     android:textSize="24sp" />
             </FrameLayout>
-            <Button
-                android:id="@+id/b0"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@color/colorPrimaryDark"
-                android:text="0"
-                android:textColor="@color/colorPrimary" />
+
 
             <FrameLayout
 
                 android:id="@+id/be2"
                 android:layout_width="40dp"
                 android:layout_height="80dp"
-                android:layout_weight="0.1"
+                android:layout_weight="1"
                 android:background="@color/colorPrimaryDark"
                 android:padding="10dp"
                 android:text=""

@@ -54,6 +54,7 @@ public class FragmentC extends Fragment implements View.OnClickListener {
         ((Button)view.findViewById(R.id.b7)).setOnClickListener(this);
         ((Button)view.findViewById(R.id.b8)).setOnClickListener(this);
         ((Button)view.findViewById(R.id.b9)).setOnClickListener(this);
+        ((Button)view.findViewById(R.id.b0)).setOnClickListener(this);
         ((Button)view.findViewById(R.id.be3)).setOnClickListener(this);
         ((Button)view.findViewById(R.id.be3)).setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -113,6 +114,9 @@ public class FragmentC extends Fragment implements View.OnClickListener {
                 break;
             case R.id.b9:
                 token+="9";
+                break;
+            case R.id.b0:
+                token+="0";
                 break;
             case R.id.be3:
                 token=(token.length()!=0)?(token.substring(0,token.length()-1)):"";

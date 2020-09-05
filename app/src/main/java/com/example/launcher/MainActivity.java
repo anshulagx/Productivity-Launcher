@@ -211,7 +211,7 @@ class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
         //Log.d("TAG", "onFling: ");
         //Log.d("vx", "onFling: "+velocityX);
         //Log.d("vy", "onFling: "+velocityY);
-        if(velocityY>10000)
+        if(velocityY>8000)
         {
             //open notification
             Log.d("TAG", "Open notification shade");

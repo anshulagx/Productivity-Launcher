@@ -79,11 +79,12 @@ public class FragmentD extends Fragment {
                 
         try {
             frame.removeAllViews();
+
+            Log.i("TAG", "The widget size is: " + appWidgetInfo.minWidth + "*" + appWidgetInfo.minHeight);
+            frame.addView(hostView);
         } catch (Exception e) {
         }
 
-        Log.i("TAG", "The widget size is: " + appWidgetInfo.minWidth + "*" + appWidgetInfo.minHeight);
-        frame.addView(hostView);
 
     }
        private void initWidgetHost() {

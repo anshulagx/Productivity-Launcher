@@ -36,7 +36,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity  {
 
-    public static String favApps[]={"Google"};
+    public static String favApps[]={"Reminder"};
 
     public static List<AppInfo> appData;
     public static HashMap<String, String> appMap;
@@ -61,31 +61,19 @@ public class MainActivity extends AppCompatActivity  {
     private void doStuff()
     {
 
-        ProgressDialog progress = new ProgressDialog(this);
-        progress.setTitle("Loading");
-        progress.setMessage("Wait while loading...");
-        progress.setCancelable(false); // disable dismiss by tapping outside of the dialog
-        progress.show();
-        Log.d(" TAG pos:", "1");
 
         //to be used elsewhere
         appData=generateInstalledAppData();//appMAp is also initaialize here
         contactInfoMap=generateContactsData();
 
-        Log.d(" TAG pos:", "2");
 
         mPager = (ViewPager) findViewById(R.id.mainFrame);
         ViewPagerAdapter mPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        Log.d(" TAG pos:", "3");
 
         mPager.setAdapter(mPagerAdapter);
-        Log.d(" TAG pos:", "4");
 
         mPager.setCurrentItem(1);
-        Log.d(" TAG pos:", "5");
 
-        progress.dismiss();
-        Log.d(" TAG pos:", "6");
 
         // get the gesture detector for pull down notification
         mDetector = new GestureDetector(this, new MyGestureListener());
@@ -179,7 +167,7 @@ public class MainActivity extends AppCompatActivity  {
                     new String[] { permission1 },
                     requestCode1);
         }
-        if( ContextCompat.checkSelfPermission(MainActivity.this, permission2)
+        else if( ContextCompat.checkSelfPermission(MainActivity.this, permission2)
             == PackageManager.PERMISSION_DENIED){
             // Requesting the permission
             ActivityCompat.requestPermissions(MainActivity.this,
@@ -187,13 +175,14 @@ public class MainActivity extends AppCompatActivity  {
                     requestCode2);
         }
 
-        if(ContextCompat.checkSelfPermission(MainActivity.this, permission2)
+        else if(ContextCompat.checkSelfPermission(MainActivity.this, permission2)
                 == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(MainActivity.this, permission2)
                 == PackageManager.PERMISSION_GRANTED)
             {
             doStuff();
             hasPermission=true;
         }
+
     }
     @Override
     public void onRequestPermissionsResult(int requestCode,@NonNull String[] permissions,@NonNull int[] grantResults)
@@ -202,8 +191,9 @@ public class MainActivity extends AppCompatActivity  {
 
         if (requestCode == 30 || requestCode==20) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                hasPermission=true;
-                doStuff();
+                checkPermission(Manifest.permission.CALL_PHONE,Manifest.permission.READ_CONTACTS,30,20);
+                //hasPermission=true;
+                //doStuff();
 
             }
             else {

@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -95,7 +96,7 @@ public class FragmentC_RecyclerViewAdapter extends RecyclerView.Adapter<Fragment
                 public boolean onLongClick(final View view) {
                     AlertDialog.Builder builder=new AlertDialog.Builder(view.getContext());
                     builder.setTitle("Settings");
-                    String options[]={"Add to Favourite","Settings","Uninstall"};
+                    String options[]={"Swap Favourite","Settings","Uninstall"};
                     builder.setItems(options, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
@@ -107,6 +108,8 @@ public class FragmentC_RecyclerViewAdapter extends RecyclerView.Adapter<Fragment
                                 case 0:
                                     //add to favourite
                                     //TODO
+                                    MainActivity.favApps[0]=txt.getText().toString();
+                                    Toast.makeText(view.getContext(),"This will be updated the next time when the app refreshes",Toast.LENGTH_SHORT).show();
                                     break;
                                 case 1:
                                     //settings

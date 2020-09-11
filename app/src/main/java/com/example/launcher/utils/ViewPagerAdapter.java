@@ -5,10 +5,9 @@ package com.example.launcher.utils;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-import com.example.launcher.FragmentA;
-import com.example.launcher.FragmentB;
-import com.example.launcher.FragmentC;
-import com.example.launcher.FragmentD;
+import com.example.launcher.FragmentHome;
+import com.example.launcher.FragmentT9;
+import com.example.launcher.FragmentWidget;
 
 public class ViewPagerAdapter extends FragmentPagerAdapter {
 
@@ -23,13 +22,13 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
         switch (position)
         {
             case 0:
-                return new FragmentD();
+                return new FragmentWidget();
             case 1:
-                return new FragmentA();
+                return new FragmentHome();
             case 2:
-                return new FragmentC();
+                return new FragmentT9();
         }
-        return new FragmentA();
+        return new FragmentHome();
     }
 
     @Override

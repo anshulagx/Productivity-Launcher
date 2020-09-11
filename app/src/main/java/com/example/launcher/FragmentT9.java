@@ -31,7 +31,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class FragmentC extends Fragment implements View.OnClickListener {
+public class FragmentT9 extends Fragment implements View.OnClickListener {
 
     static String token;
     List<AppInfo> appList;

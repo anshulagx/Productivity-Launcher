@@ -21,7 +21,7 @@ import android.widget.LinearLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FragmentD extends Fragment {
+public class FragmentWidget extends Fragment {
 
     View view;
 

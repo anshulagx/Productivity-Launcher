@@ -26,7 +26,7 @@ import com.example.launcher.utils.AppInfo;
 
 import java.util.List;
 
-public class FragmentA extends Fragment  {
+public class FragmentHome extends Fragment  {
 
 
     View view;
@@ -89,7 +89,7 @@ public class FragmentA extends Fragment  {
                         public boolean onLongClick(final View view) {
                             AlertDialog.Builder builder=new AlertDialog.Builder(getContext());
                             builder.setTitle("Settings");
-                            String options[]={"Remove from Favourite","Settings","Uninstall"};
+                            String options[]={"Settings","Uninstall"};
                             builder.setItems(options, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
@@ -99,18 +99,19 @@ public class FragmentA extends Fragment  {
 
 
                                     switch (i) {
-                                        case 0:
+                                        case 2:
                                             //TODO
                                             //add to favourite
+
                                             break;
-                                        case 1:
+                                        case 0:
                                             //settings
                                             Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                                             Uri uri = Uri.fromParts("package", MainActivity.appMap.get(option), null);
                                             intent.setData(uri);
                                             view.getContext().startActivity(intent);
                                             break;
-                                        case 3:
+                                        case 1:
                                             //uninstall
                                             Intent intent1=new Intent(Intent.ACTION_DELETE);
                                             intent1.setData(Uri.parse("package:"+MainActivity.appMap.get(option)));

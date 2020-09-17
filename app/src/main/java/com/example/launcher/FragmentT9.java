@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -60,7 +61,9 @@ public class FragmentT9 extends Fragment implements View.OnClickListener {
             @Override
             public boolean onLongClick(View view) {
                 token="";
-                updateListWith(token);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    updateListWith(token);
+                }
                 return false;
             }
         });
@@ -141,10 +144,10 @@ public class FragmentT9 extends Fragment implements View.OnClickListener {
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void makePhoneCallAt(final String token) {
-        FrameLayout b=(FrameLayout) getView().findViewById(R.id.be2);
+        ImageView b= getView().findViewById(R.id.be2);
         String defaultDialer=((TelecomManager)getActivity().getSystemService(Context.TELECOM_SERVICE)).getDefaultDialerPackage();
         try {
-            b.setBackground(getActivity().getPackageManager().getApplicationIcon(defaultDialer));
+            b.setImageDrawable(getActivity().getPackageManager().getApplicationIcon(defaultDialer));
         }
         catch (Exception e)
         {}
@@ -205,13 +208,13 @@ public class FragmentT9 extends Fragment implements View.OnClickListener {
         adapter.notifyDataSetChanged();
 
         //change the icon of be2 button
-        FrameLayout b=(FrameLayout) getView().findViewById(R.id.be2);
+        ImageView b= getView().findViewById(R.id.be2);
 
         if(newList.get(0).isContact)
         {
             String defaultDialer=((TelecomManager)getActivity().getSystemService(Context.TELECOM_SERVICE)).getDefaultDialerPackage();
             try {
-                b.setBackground(getActivity().getPackageManager().getApplicationIcon(defaultDialer));
+                b.setImageDrawable(getActivity().getPackageManager().getApplicationIcon(defaultDialer));
 
             }
             catch (Exception e){}
@@ -227,7 +230,7 @@ public class FragmentT9 extends Fragment implements View.OnClickListener {
         }
         else
         {
-            b.setBackground(newList.get(0).icon);
+            b.setImageDrawable(newList.get(0).icon);
             //add onclick listener
             b.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -271,6 +274,8 @@ public class FragmentT9 extends Fragment implements View.OnClickListener {
         TextView t=((TextView)getView().findViewById(R.id.tokenDisplay));
         t.setText("");
 
-        updateListWith(token);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            updateListWith(token);
+        }
     }
 }

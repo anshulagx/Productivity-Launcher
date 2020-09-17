@@ -26,7 +26,9 @@
         android:layout_width="413dp"
         android:layout_height="407dp"
         android:layout_marginBottom="30dp"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <TableRow
             android:layout_width="match_parent"
@@ -131,20 +133,23 @@
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:gravity="end"
             android:layout_weight="0.75">
+
             <Button
                 android:id="@+id/b0"
-                android:layout_width="match_parent"
+                android:layout_width="40dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
+
                 android:background="@color/colorPrimaryDark"
                 android:text=""
                 android:textColor="@color/colorPrimary" />
+
             <FrameLayout
                 android:id="@+id/be1"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:layout_height="100dp"
                 android:background="@color/colorPrimaryDark"
                 android:text=""
                 android:textColor="@color/colorPrimary">
@@ -160,25 +165,34 @@
             </FrameLayout>
 
 
-            <FrameLayout
+            <LinearLayout
 
-                android:id="@+id/be2"
-                android:layout_width="40dp"
-                android:layout_height="80dp"
-                android:layout_weight="1"
+                android:id="@+id/be2old"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
                 android:background="@color/colorPrimaryDark"
-                android:padding="10dp"
+                android:padding="2dp"
+                android:gravity="center"
+                android:orientation="horizontal"
                 android:text=""
-                android:textColor="@color/colorPrimary" />
+                android:textColor="@color/colorPrimary" >
+
+                <ImageView
+                    android:id="@+id/be2"
+                    android:scaleType="fitCenter"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"/>
+            </LinearLayout>
 
             <Button
                 android:id="@+id/be3"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
                 android:background="@color/colorPrimaryDark"
+                android:gravity="start|center_vertical"
                 android:text="BACK"
-                android:textColor="@color/colorPrimary" />
+                android:textColor="@color/colorPrimary"
+                android:paddingLeft="10dp" />
         </TableRow>
 
 

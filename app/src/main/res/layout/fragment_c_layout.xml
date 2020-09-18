@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -133,8 +132,8 @@
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="end"
-            android:layout_weight="0.75">
+            android:layout_weight="0.75"
+            android:gravity="end">
 
             <Button
                 android:id="@+id/b0"
@@ -148,8 +147,8 @@
             <FrameLayout
                 android:id="@+id/be1"
                 android:layout_width="match_parent"
-                android:layout_weight="1"
                 android:layout_height="100dp"
+                android:layout_weight="1"
                 android:background="@color/colorPrimaryDark"
                 android:text=""
                 android:textColor="@color/colorPrimary">
@@ -171,17 +170,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:background="@color/colorPrimaryDark"
-                android:padding="2dp"
                 android:gravity="center"
                 android:orientation="horizontal"
+                android:padding="2dp"
                 android:text=""
-                android:textColor="@color/colorPrimary" >
+                android:textColor="@color/colorPrimary">
 
                 <ImageView
                     android:id="@+id/be2"
-                    android:scaleType="fitCenter"
                     android:layout_width="50dp"
-                    android:layout_height="50dp"/>
+                    android:layout_height="50dp"
+                    android:scaleType="fitCenter" />
             </LinearLayout>
 
             <Button
@@ -190,9 +189,9 @@
                 android:layout_height="match_parent"
                 android:background="@color/colorPrimaryDark"
                 android:gravity="start|center_vertical"
+                android:paddingLeft="10dp"
                 android:text="BACK"
-                android:textColor="@color/colorPrimary"
-                android:paddingLeft="10dp" />
+                android:textColor="@color/colorPrimary" />
         </TableRow>
 
 

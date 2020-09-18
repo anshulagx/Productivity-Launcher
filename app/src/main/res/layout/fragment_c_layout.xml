@@ -40,7 +40,6 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@color/colorPrimaryDark"
-
                 android:text=""
                 android:textColor="@color/colorPrimary" />
 

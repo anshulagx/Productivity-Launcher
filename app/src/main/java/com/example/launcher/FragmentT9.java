@@ -181,6 +181,7 @@ public class FragmentT9 extends Fragment implements View.OnClickListener {
                 Drawable icon=null;
                 try {
                     icon = getActivity().getPackageManager().getApplicationIcon(pkg);
+
                 }catch (Exception e)
                 {
 

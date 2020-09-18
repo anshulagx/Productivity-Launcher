@@ -7,6 +7,7 @@ import android.appwidget.AppWidgetHost;
 import android.appwidget.AppWidgetHostView;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProviderInfo;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,18 +16,24 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.example.launcher.utils.AppInfo;
-
 import java.util.List;
 
-public class FragmentHome extends Fragment  {
+import static android.content.Context.LAYOUT_INFLATER_SERVICE;
+
+public class FragmentHome extends Fragment implements View.OnClickListener {
 
 
     View view;
@@ -42,6 +49,8 @@ public class FragmentHome extends Fragment  {
 
         handelFavButtons(appList,MainActivity.favApps,view);
 
+        handelNotes();
+
         //everything about widgets in Fragment A
         SharedPreferences sharedPref= PreferenceManager.getDefaultSharedPreferences(getContext());
         int widgetId = sharedPref.getInt("defaultWidget",-1);
@@ -53,6 +62,50 @@ public class FragmentHome extends Fragment  {
             setDefaultWidget(displayWidgetid);//38 is default for calendar app widget
         }
         return view;
+    }
+
+    private void handelNotes() {
+        TextView note1=view.findViewById(R.id.note1);
+        TextView note2=view.findViewById(R.id.note2);
+        TextView note3=view.findViewById(R.id.note3);
+        TextView note4=view.findViewById(R.id.note4);
+        TextView note5=view.findViewById(R.id.note5);
+        TextView note6=view.findViewById(R.id.note6);
+
+        /*
+        check if note 1 is available
+        set text of note one
+        repeat for others
+        * */
+        SharedPreferences sp=getActivity().getSharedPreferences("notes",Context.MODE_PRIVATE);
+
+        if(sp.contains(R.id.note1+""))
+            note1.setText(sp.getString(R.id.note1+"",""));
+        if(sp.contains(R.id.note2+""))
+            note1.setText(sp.getString(R.id.note2+"",""));
+        if(sp.contains(R.id.note3+""))
+            note1.setText(sp.getString(R.id.note3+"",""));
+        if(sp.contains(R.id.note4+""))
+            note1.setText(sp.getString(R.id.note4+"",""));
+        if(sp.contains(R.id.note5+""))
+            note1.setText(sp.getString(R.id.note5+"",""));
+        if(sp.contains(R.id.note6+""))
+            note1.setText(sp.getString(R.id.note6+"",""));
+
+
+        /*
+        * add on click lister
+        * call popup
+        * update
+        * */
+        note1.setOnClickListener(this);
+        note2.setOnClickListener(this);
+        note3.setOnClickListener(this);
+        note4.setOnClickListener(this);
+        note5.setOnClickListener(this);
+        note6.setOnClickListener(this);
+
+
     }
 
     private void handelFavButtons(List<AppInfo> appList, String[] favApps, View view) {
@@ -232,4 +285,85 @@ public class FragmentHome extends Fragment  {
         mAppWidgetHost.stopListening();
     }
 
+    @Override
+    public void onClick(View view) {
+        //called when a note is clicked
+
+        switch (view.getId())
+        {
+            case R.id.note1:
+                showPopupWindow(R.id.note1);
+                break;
+            case R.id.note2:
+                showPopupWindow(R.id.note2);
+                break;
+            case R.id.note3:
+                showPopupWindow(R.id.note3);
+                break;
+
+             case R.id.note4:
+                showPopupWindow(R.id.note4);
+                 break;
+            case R.id.note5:
+                showPopupWindow(R.id.note5);
+                break;
+            case R.id.note6:
+                showPopupWindow(R.id.note6);
+                 break;
+        }
+
+    }
+
+    public void showPopupWindow(final int noteId) {
+
+        // inflate the layout of the popup window
+        LayoutInflater inflater = (LayoutInflater)getContext().getSystemService(LAYOUT_INFLATER_SERVICE);
+        final View popupView = inflater.inflate(R.layout.notes_popup, null);
+
+        // create the popup window
+        int width = LinearLayout.LayoutParams.MATCH_PARENT;
+        int height = LinearLayout.LayoutParams.WRAP_CONTENT;
+        boolean focusable = true; // lets taps outside the popup also dismiss it
+        final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
+
+        final EditText txt=popupView.findViewById(R.id.popupTxt);
+        txt.requestFocus();
+        Button saveBtn=popupView.findViewById(R.id.popupSaveBtn);
+        saveBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String t=txt.getText().toString();
+                SharedPreferences sp=getActivity().getSharedPreferences("notes", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sp.edit();
+                editor.putString(noteId+"",t);
+                editor.commit();
+                TextView textView=(TextView)getActivity().findViewById(noteId);
+                textView.setText(t);
+                popupWindow.dismiss();
+            }
+        });
+
+        Button deleteBtn=popupView.findViewById(R.id.popupDeleteBtn);
+        deleteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences sp=getActivity().getSharedPreferences("notes", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sp.edit();
+                editor.putString(noteId+"","");
+                editor.commit();
+                TextView textView=(TextView)getActivity().findViewById(noteId);
+                textView.setText("");
+                popupWindow.dismiss();
+            }
+        });
+
+
+
+
+        // show the popup window
+        // which view you pass in doesn't matter, it is only used for the window tolken
+        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+
+
+    }
 }

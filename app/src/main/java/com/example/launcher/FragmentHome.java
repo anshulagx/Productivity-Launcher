@@ -23,6 +23,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -331,7 +332,6 @@ public class FragmentHome extends Fragment implements View.OnClickListener {
 
         final EditText txt=popupView.findViewById(R.id.popupTxt);
         txt.setText(def);
-        txt.requestFocus();
 
         SharedPreferences sp=PreferenceManager.getDefaultSharedPreferences(getActivity());
         final SharedPreferences.Editor editor = sp.edit();
@@ -415,6 +415,10 @@ public class FragmentHome extends Fragment implements View.OnClickListener {
                 editor.commit();
                 textView.setText(t);
                 popupWindow.dismiss();
+
+                //hide keyboard
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(popupView.getWindowToken(), 0);
             }
         });
 
@@ -428,6 +432,10 @@ public class FragmentHome extends Fragment implements View.OnClickListener {
                 editor.putString("c"+noteId, String.valueOf(R.color.colorPrimaryDark));
                 editor.commit();
                 popupWindow.dismiss();
+
+                //hide keyboard
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(popupView.getWindowToken(), 0);
             }
         });
 
@@ -438,6 +446,10 @@ public class FragmentHome extends Fragment implements View.OnClickListener {
         // which view you pass in doesn't matter, it is only used for the window tolken
         popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
 
+        //show keyboard
+        txt.requestFocus();
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,InputMethodManager.HIDE_NOT_ALWAYS);
 
     }
 }

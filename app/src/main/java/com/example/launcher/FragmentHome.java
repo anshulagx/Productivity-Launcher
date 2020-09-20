@@ -292,31 +292,32 @@ public class FragmentHome extends Fragment implements View.OnClickListener {
     public void onClick(View view) {
         //called when a note is clicked
 
+        TextView txt=(TextView)view;
         switch (view.getId())
         {
             case R.id.note1:
-                showPopupWindow(R.id.note1);
+                showPopupWindow(R.id.note1,txt.getText().toString());
                 break;
             case R.id.note2:
-                showPopupWindow(R.id.note2);
+                showPopupWindow(R.id.note2,txt.getText().toString());
                 break;
             case R.id.note3:
-                showPopupWindow(R.id.note3);
+                showPopupWindow(R.id.note3,txt.getText().toString());
                 break;
              case R.id.note4:
-                showPopupWindow(R.id.note4);
+                showPopupWindow(R.id.note4,txt.getText().toString());
                  break;
             case R.id.note5:
-                showPopupWindow(R.id.note5);
+                showPopupWindow(R.id.note5,txt.getText().toString());
                 break;
             case R.id.note6:
-                showPopupWindow(R.id.note6);
+                showPopupWindow(R.id.note6,txt.getText().toString());
                  break;
         }
 
     }
 
-    public void showPopupWindow(final int noteId) {
+    public void showPopupWindow(final int noteId,String def) {
 
         // inflate the layout of the popup window
         LayoutInflater inflater = (LayoutInflater)getContext().getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -329,6 +330,7 @@ public class FragmentHome extends Fragment implements View.OnClickListener {
         final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
 
         final EditText txt=popupView.findViewById(R.id.popupTxt);
+        txt.setText(def);
         txt.requestFocus();
 
         SharedPreferences sp=PreferenceManager.getDefaultSharedPreferences(getActivity());
@@ -423,6 +425,8 @@ public class FragmentHome extends Fragment implements View.OnClickListener {
                 editor.putString(noteId+"","");
                 editor.commit();
                 textView.setText("");
+                editor.putString("c"+noteId, String.valueOf(R.color.colorPrimaryDark));
+                editor.commit();
                 popupWindow.dismiss();
             }
         });

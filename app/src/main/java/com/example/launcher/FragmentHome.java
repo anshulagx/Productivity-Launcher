@@ -2,6 +2,7 @@ package com.example.launcher;
 
 import androidx.fragment.app.Fragment;
 //import android.app.Fragment;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.appwidget.AppWidgetHost;
 import android.appwidget.AppWidgetHostView;
@@ -11,6 +12,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -32,6 +34,7 @@ import com.example.launcher.utils.AppInfo;
 import java.util.List;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
+import static com.example.launcher.R.color.noteHighlight1;
 
 public class FragmentHome extends Fragment implements View.OnClickListener {
 
@@ -79,26 +82,25 @@ public class FragmentHome extends Fragment implements View.OnClickListener {
         * */
         SharedPreferences sp=PreferenceManager.getDefaultSharedPreferences(getActivity());
 
-        //if(sp.contains(R.id.note1+""))
-            note1.setText(sp.getString(R.id.note1+"",""));
-            //Log.d("Notes:",sp.getString(R.id.note1+"",""));
-        //if(sp.contains(R.id.note2+""))
-            note2.setText(sp.getString(R.id.note2+"",""));
-        //if(sp.contains(R.id.note3+""))
-            note3.setText(sp.getString(R.id.note3+"",""));
-        //if(sp.contains(R.id.note4+""))
-            note4.setText(sp.getString(R.id.note4+"",""));
-        //if(sp.contains(R.id.note5+""))
-            note5.setText(sp.getString(R.id.note5+"",""));
-        //if(sp.contains(R.id.note6+""))
-            note6.setText(sp.getString(R.id.note6+"",""));
+                note1.setText(sp.getString(R.id.note1+"",""));
+                //Log.d("Notes:",sp.getString(R.id.note1+"",""));
+                note2.setText(sp.getString(R.id.note2+"",""));
+                note3.setText(sp.getString(R.id.note3+"",""));
+                note4.setText(sp.getString(R.id.note4+"",""));
+                note5.setText(sp.getString(R.id.note5+"",""));
+                note6.setText(sp.getString(R.id.note6+"",""));
+
+                Log.d("notes1:", sp.getString(("c"+R.id.note1),""));
+
+        note1.setBackgroundResource(Integer.parseInt((sp.getString(("c"+R.id.note1), "0"))));
+        note2.setBackgroundResource(Integer.parseInt((sp.getString(("c"+R.id.note2), "0"))));
+        note3.setBackgroundResource(Integer.parseInt((sp.getString(("c"+R.id.note3), "0"))));
+        note4.setBackgroundResource(Integer.parseInt((sp.getString(("c"+R.id.note4), "0"))));
+        note5.setBackgroundResource(Integer.parseInt((sp.getString(("c"+R.id.note5), "0"))));
+        note6.setBackgroundResource(Integer.parseInt((sp.getString(("c"+R.id.note6), "0"))));
 
 
-        /*
-        * add on click lister
-        * call popup
-        * update
-        * */
+
         note1.setOnClickListener(this);
         note2.setOnClickListener(this);
         note3.setOnClickListener(this);
@@ -328,16 +330,87 @@ public class FragmentHome extends Fragment implements View.OnClickListener {
 
         final EditText txt=popupView.findViewById(R.id.popupTxt);
         txt.requestFocus();
+
+        SharedPreferences sp=PreferenceManager.getDefaultSharedPreferences(getActivity());
+        final SharedPreferences.Editor editor = sp.edit();
+
+        Button c1=popupView.findViewById(R.id.c1);
+        Button c2=popupView.findViewById(R.id.c2);
+        Button c3=popupView.findViewById(R.id.c3);
+        Button c4=popupView.findViewById(R.id.c4);
+        Button c5=popupView.findViewById(R.id.c5);
+        Button c6=popupView.findViewById(R.id.c6);
+
+        final TextView textView=(TextView)getActivity().findViewById(noteId);
+        c1.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("ResourceAsColor")
+            @Override
+            public void onClick(View view) {
+                editor.putString("c"+noteId, String.valueOf((noteHighlight1)));
+                Log.d("notes",String.valueOf((noteHighlight1)));
+                editor.commit();
+
+                textView.setBackgroundResource(noteHighlight1);
+            }
+        });
+        c2.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("ResourceAsColor")
+            @Override
+            public void onClick(View view) {
+                editor.putString("c"+noteId, String.valueOf(R.color.noteHighlight2));
+                editor.commit();
+
+                textView.setBackgroundResource(R.color.noteHighlight2);
+            }
+        });
+        c3.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("ResourceAsColor")
+            @Override
+            public void onClick(View view) {
+                editor.putString("c"+noteId, String.valueOf(R.color.noteHighlight3));
+                editor.commit();
+
+                textView.setBackgroundResource(R.color.noteHighlight3);
+            }
+        });
+        c4.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("ResourceAsColor")
+            @Override
+            public void onClick(View view) {
+                editor.putString("c"+noteId, String.valueOf(R.color.noteHighlight4));
+                editor.commit();
+
+                textView.setBackgroundResource(R.color.noteHighlight4);
+            }
+        });
+        c5.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("ResourceAsColor")
+            @Override
+            public void onClick(View view) {
+                editor.putString("c"+noteId, String.valueOf(R.color.noteHighlight5));
+                editor.commit();
+
+                textView.setBackgroundResource(R.color.noteHighlight5);
+            }
+        });
+        c6.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("ResourceAsColor")
+            @Override
+            public void onClick(View view) {
+                editor.putString("c"+noteId, String.valueOf(R.color.noteHighlight6));
+                editor.commit();
+                textView.setBackgroundResource(R.color.noteHighlight6);
+            }
+        });
+
         Button saveBtn=popupView.findViewById(R.id.popupSaveBtn);
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String t=txt.getText().toString();
-                SharedPreferences sp=PreferenceManager.getDefaultSharedPreferences(getActivity());
-                SharedPreferences.Editor editor = sp.edit();
+
                 editor.putString(noteId+"",t);
                 editor.commit();
-                TextView textView=(TextView)getActivity().findViewById(noteId);
                 textView.setText(t);
                 popupWindow.dismiss();
             }
@@ -347,11 +420,8 @@ public class FragmentHome extends Fragment implements View.OnClickListener {
         deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SharedPreferences sp=PreferenceManager.getDefaultSharedPreferences(getActivity());
-                SharedPreferences.Editor editor = sp.edit();
                 editor.putString(noteId+"","");
                 editor.commit();
-                TextView textView=(TextView)getActivity().findViewById(noteId);
                 textView.setText("");
                 popupWindow.dismiss();
             }

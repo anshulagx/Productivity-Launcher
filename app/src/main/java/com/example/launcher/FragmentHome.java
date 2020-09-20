@@ -77,20 +77,21 @@ public class FragmentHome extends Fragment implements View.OnClickListener {
         set text of note one
         repeat for others
         * */
-        SharedPreferences sp=getActivity().getSharedPreferences("notes",Context.MODE_PRIVATE);
+        SharedPreferences sp=PreferenceManager.getDefaultSharedPreferences(getActivity());
 
-        if(sp.contains(R.id.note1+""))
+        //if(sp.contains(R.id.note1+""))
             note1.setText(sp.getString(R.id.note1+"",""));
-        if(sp.contains(R.id.note2+""))
-            note1.setText(sp.getString(R.id.note2+"",""));
-        if(sp.contains(R.id.note3+""))
-            note1.setText(sp.getString(R.id.note3+"",""));
-        if(sp.contains(R.id.note4+""))
-            note1.setText(sp.getString(R.id.note4+"",""));
-        if(sp.contains(R.id.note5+""))
-            note1.setText(sp.getString(R.id.note5+"",""));
-        if(sp.contains(R.id.note6+""))
-            note1.setText(sp.getString(R.id.note6+"",""));
+            //Log.d("Notes:",sp.getString(R.id.note1+"",""));
+        //if(sp.contains(R.id.note2+""))
+            note2.setText(sp.getString(R.id.note2+"",""));
+        //if(sp.contains(R.id.note3+""))
+            note3.setText(sp.getString(R.id.note3+"",""));
+        //if(sp.contains(R.id.note4+""))
+            note4.setText(sp.getString(R.id.note4+"",""));
+        //if(sp.contains(R.id.note5+""))
+            note5.setText(sp.getString(R.id.note5+"",""));
+        //if(sp.contains(R.id.note6+""))
+            note6.setText(sp.getString(R.id.note6+"",""));
 
 
         /*
@@ -300,7 +301,6 @@ public class FragmentHome extends Fragment implements View.OnClickListener {
             case R.id.note3:
                 showPopupWindow(R.id.note3);
                 break;
-
              case R.id.note4:
                 showPopupWindow(R.id.note4);
                  break;
@@ -333,7 +333,7 @@ public class FragmentHome extends Fragment implements View.OnClickListener {
             @Override
             public void onClick(View view) {
                 String t=txt.getText().toString();
-                SharedPreferences sp=getActivity().getSharedPreferences("notes", Context.MODE_PRIVATE);
+                SharedPreferences sp=PreferenceManager.getDefaultSharedPreferences(getActivity());
                 SharedPreferences.Editor editor = sp.edit();
                 editor.putString(noteId+"",t);
                 editor.commit();
@@ -347,7 +347,7 @@ public class FragmentHome extends Fragment implements View.OnClickListener {
         deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SharedPreferences sp=getActivity().getSharedPreferences("notes", Context.MODE_PRIVATE);
+                SharedPreferences sp=PreferenceManager.getDefaultSharedPreferences(getActivity());
                 SharedPreferences.Editor editor = sp.edit();
                 editor.putString(noteId+"","");
                 editor.commit();

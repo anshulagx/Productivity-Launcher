@@ -2,31 +2,42 @@ package com.example.launcher;
 
 import androidx.fragment.app.Fragment;
 //import android.app.Fragment;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.appwidget.AppWidgetHost;
 import android.appwidget.AppWidgetHostView;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProviderInfo;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.example.launcher.utils.AppInfo;
-
 import java.util.List;
 
-public class FragmentHome extends Fragment  {
+import static android.content.Context.LAYOUT_INFLATER_SERVICE;
+import static com.example.launcher.R.color.noteHighlight1;
+
+public class FragmentHome extends Fragment implements View.OnClickListener {
 
 
     View view;
@@ -42,6 +53,8 @@ public class FragmentHome extends Fragment  {
 
         handelFavButtons(appList,MainActivity.favApps,view);
 
+        handelNotes();
+
         //everything about widgets in Fragment A
         SharedPreferences sharedPref= PreferenceManager.getDefaultSharedPreferences(getContext());
         int widgetId = sharedPref.getInt("defaultWidget",-1);
@@ -53,6 +66,50 @@ public class FragmentHome extends Fragment  {
             setDefaultWidget(displayWidgetid);//38 is default for calendar app widget
         }
         return view;
+    }
+
+    private void handelNotes() {
+        TextView note1=view.findViewById(R.id.note1);
+        TextView note2=view.findViewById(R.id.note2);
+        TextView note3=view.findViewById(R.id.note3);
+        TextView note4=view.findViewById(R.id.note4);
+        TextView note5=view.findViewById(R.id.note5);
+        TextView note6=view.findViewById(R.id.note6);
+
+        /*
+        check if note 1 is available
+        set text of note one
+        repeat for others
+        * */
+        SharedPreferences sp=PreferenceManager.getDefaultSharedPreferences(getActivity());
+
+                note1.setText(sp.getString(R.id.note1+"",""));
+                //Log.d("Notes:",sp.getString(R.id.note1+"",""));
+                note2.setText(sp.getString(R.id.note2+"",""));
+                note3.setText(sp.getString(R.id.note3+"",""));
+                note4.setText(sp.getString(R.id.note4+"",""));
+                note5.setText(sp.getString(R.id.note5+"",""));
+                note6.setText(sp.getString(R.id.note6+"",""));
+
+                Log.d("notes1:", sp.getString(("c"+R.id.note1),""));
+
+        note1.setBackgroundResource(Integer.parseInt((sp.getString(("c"+R.id.note1), "0"))));
+        note2.setBackgroundResource(Integer.parseInt((sp.getString(("c"+R.id.note2), "0"))));
+        note3.setBackgroundResource(Integer.parseInt((sp.getString(("c"+R.id.note3), "0"))));
+        note4.setBackgroundResource(Integer.parseInt((sp.getString(("c"+R.id.note4), "0"))));
+        note5.setBackgroundResource(Integer.parseInt((sp.getString(("c"+R.id.note5), "0"))));
+        note6.setBackgroundResource(Integer.parseInt((sp.getString(("c"+R.id.note6), "0"))));
+
+
+
+        note1.setOnClickListener(this);
+        note2.setOnClickListener(this);
+        note3.setOnClickListener(this);
+        note4.setOnClickListener(this);
+        note5.setOnClickListener(this);
+        note6.setOnClickListener(this);
+
+
     }
 
     private void handelFavButtons(List<AppInfo> appList, String[] favApps, View view) {
@@ -232,4 +289,167 @@ public class FragmentHome extends Fragment  {
         mAppWidgetHost.stopListening();
     }
 
+    @Override
+    public void onClick(View view) {
+        //called when a note is clicked
+
+        TextView txt=(TextView)view;
+        switch (view.getId())
+        {
+            case R.id.note1:
+                showPopupWindow(R.id.note1,txt.getText().toString());
+                break;
+            case R.id.note2:
+                showPopupWindow(R.id.note2,txt.getText().toString());
+                break;
+            case R.id.note3:
+                showPopupWindow(R.id.note3,txt.getText().toString());
+                break;
+             case R.id.note4:
+                showPopupWindow(R.id.note4,txt.getText().toString());
+                 break;
+            case R.id.note5:
+                showPopupWindow(R.id.note5,txt.getText().toString());
+                break;
+            case R.id.note6:
+                showPopupWindow(R.id.note6,txt.getText().toString());
+                 break;
+        }
+
+    }
+
+    public void showPopupWindow(final int noteId,String def) {
+
+        // inflate the layout of the popup window
+        LayoutInflater inflater = (LayoutInflater)getContext().getSystemService(LAYOUT_INFLATER_SERVICE);
+        final View popupView = inflater.inflate(R.layout.notes_popup, null);
+
+        // create the popup window
+        int width = LinearLayout.LayoutParams.MATCH_PARENT;
+        int height = LinearLayout.LayoutParams.WRAP_CONTENT;
+        boolean focusable = true; // lets taps outside the popup also dismiss it
+        final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
+
+        final EditText txt=popupView.findViewById(R.id.popupTxt);
+        txt.setText(def);
+
+        SharedPreferences sp=PreferenceManager.getDefaultSharedPreferences(getActivity());
+        final SharedPreferences.Editor editor = sp.edit();
+
+        Button c1=popupView.findViewById(R.id.c1);
+        Button c2=popupView.findViewById(R.id.c2);
+        Button c3=popupView.findViewById(R.id.c3);
+        Button c4=popupView.findViewById(R.id.c4);
+        Button c5=popupView.findViewById(R.id.c5);
+        Button c6=popupView.findViewById(R.id.c6);
+
+        final TextView textView=(TextView)getActivity().findViewById(noteId);
+        c1.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("ResourceAsColor")
+            @Override
+            public void onClick(View view) {
+                editor.putString("c"+noteId, String.valueOf((noteHighlight1)));
+                Log.d("notes",String.valueOf((noteHighlight1)));
+                editor.commit();
+
+                textView.setBackgroundResource(noteHighlight1);
+            }
+        });
+        c2.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("ResourceAsColor")
+            @Override
+            public void onClick(View view) {
+                editor.putString("c"+noteId, String.valueOf(R.color.noteHighlight2));
+                editor.commit();
+
+                textView.setBackgroundResource(R.color.noteHighlight2);
+            }
+        });
+        c3.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("ResourceAsColor")
+            @Override
+            public void onClick(View view) {
+                editor.putString("c"+noteId, String.valueOf(R.color.noteHighlight3));
+                editor.commit();
+
+                textView.setBackgroundResource(R.color.noteHighlight3);
+            }
+        });
+        c4.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("ResourceAsColor")
+            @Override
+            public void onClick(View view) {
+                editor.putString("c"+noteId, String.valueOf(R.color.noteHighlight4));
+                editor.commit();
+
+                textView.setBackgroundResource(R.color.noteHighlight4);
+            }
+        });
+        c5.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("ResourceAsColor")
+            @Override
+            public void onClick(View view) {
+                editor.putString("c"+noteId, String.valueOf(R.color.noteHighlight5));
+                editor.commit();
+
+                textView.setBackgroundResource(R.color.noteHighlight5);
+            }
+        });
+        c6.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("ResourceAsColor")
+            @Override
+            public void onClick(View view) {
+                editor.putString("c"+noteId, String.valueOf(R.color.noteHighlight6));
+                editor.commit();
+                textView.setBackgroundResource(R.color.noteHighlight6);
+            }
+        });
+
+        Button saveBtn=popupView.findViewById(R.id.popupSaveBtn);
+        saveBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String t=txt.getText().toString();
+
+                editor.putString(noteId+"",t);
+                editor.commit();
+                textView.setText(t);
+                popupWindow.dismiss();
+
+                //hide keyboard
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(popupView.getWindowToken(), 0);
+            }
+        });
+
+        Button deleteBtn=popupView.findViewById(R.id.popupDeleteBtn);
+        deleteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                editor.putString(noteId+"","");
+                editor.commit();
+                textView.setText("");
+                editor.putString("c"+noteId, String.valueOf(R.color.colorPrimaryDark));
+                editor.commit();
+                popupWindow.dismiss();
+
+                //hide keyboard
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(popupView.getWindowToken(), 0);
+            }
+        });
+
+
+
+
+        // show the popup window
+        // which view you pass in doesn't matter, it is only used for the window tolken
+        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+
+        //show keyboard
+        txt.requestFocus();
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,InputMethodManager.HIDE_NOT_ALWAYS);
+
+    }
 }

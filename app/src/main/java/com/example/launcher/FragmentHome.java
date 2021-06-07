@@ -49,9 +49,8 @@ public class FragmentHome extends Fragment implements View.OnClickListener {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_a_layout, container, false);
 
-        List<AppInfo> appList=MainActivity.appData;
-
-        handelFavButtons(appList,MainActivity.favApps,view);
+        //List<AppInfo> appList=MainActivity.appData;
+        //handelFavButtons(appList,MainActivity.favApps,view);
 
         handelNotes();
 

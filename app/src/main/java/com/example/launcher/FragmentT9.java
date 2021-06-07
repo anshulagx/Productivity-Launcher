@@ -12,9 +12,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.FrameLayout;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -37,15 +39,34 @@ public class FragmentT9 extends Fragment implements View.OnClickListener {
     static String token;
     List<AppInfo> appList;
     Map<String,String> contactsInfoMap;
-    T9Trie<String> trie;
+    T9Trie<String> app_trie,contact_trie;
+
+    RecyclerView recyclerView;
     RecyclerView.Adapter adapter;
+
     List<AppInfo> newList;
+
+    Switch toggleSwitch;
+    static boolean toShowApp;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_c_layout, container, false);
 
         token="";
+
+        toggleSwitch=(Switch) view.findViewById(R.id.switch2);
+        toShowApp=true;
+        toggleSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                toShowApp=!b;
+                updateListWith(token);
+            }
+        });
+
         ((Button)view.findViewById(R.id.b1)).setOnClickListener(this);
         ((Button)view.findViewById(R.id.b2)).setOnClickListener(this);
         ((Button)view.findViewById(R.id.b3)).setOnClickListener(this);
@@ -56,7 +77,9 @@ public class FragmentT9 extends Fragment implements View.OnClickListener {
         ((Button)view.findViewById(R.id.b8)).setOnClickListener(this);
         ((Button)view.findViewById(R.id.b9)).setOnClickListener(this);
         ((Button)view.findViewById(R.id.b0)).setOnClickListener(this);
+
         ((Button)view.findViewById(R.id.be3)).setOnClickListener(this);
+        //clear list on long press of clear button
         ((Button)view.findViewById(R.id.be3)).setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
@@ -67,23 +90,43 @@ public class FragmentT9 extends Fragment implements View.OnClickListener {
                 return false;
             }
         });
+//        while(MainActivity.appData == null || MainActivity.contactInfoMap==null){}
+//        appList = MainActivity.appData;
+//        contactsInfoMap = MainActivity.contactInfoMap;
+//
+//        Log.d("Perf", "appTrie init");
+//        app_trie = initAppTrie(appList);
+//        Log.d("Perf", "contactTrie init");
+//        contact_trie = initContactTrie(contactsInfoMap);
 
-        appList=MainActivity.appData;
-        contactsInfoMap=MainActivity.contactInfoMap;
+        newList = new ArrayList<AppInfo>();
 
-        trie=initTrie(appList,contactsInfoMap);
-
-        newList=new ArrayList<AppInfo>();
-
-        RecyclerView recyclerView=(RecyclerView)view.findViewById(R.id.search_recycler_view);
+        recyclerView=(RecyclerView)view.findViewById(R.id.search_recycler_view);
         RecyclerView.LayoutManager layoutManager=new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
-        adapter=new FragmentC_RecyclerViewAdapter(newList);
+        adapter = new FragmentC_RecyclerViewAdapter(newList);
         recyclerView.setAdapter(adapter);
+
 
         return view;
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+
+    }
+
+        public void setUserVisibleHint(boolean isVisibleToUser) {
+            super.setUserVisibleHint(isVisibleToUser);
+            if (isVisibleToUser) {
+
+            }
+            else {
+            }
+        }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -136,15 +179,18 @@ public class FragmentT9 extends Fragment implements View.OnClickListener {
             makePhoneCallAt(token);
         }
         else
-            updateListWith(token);
-
+            try {
+                updateListWith(token);
+            }catch(Exception e){
+                Toast.makeText(view.getContext(),"Please Wait",Toast.LENGTH_SHORT).show();
+            }
 
 
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void makePhoneCallAt(final String token) {
-        ImageView b= getView().findViewById(R.id.be2);
+        ImageView b= getView().findViewById(R.id.icon3);
         String defaultDialer=((TelecomManager)getActivity().getSystemService(Context.TELECOM_SERVICE)).getDefaultDialerPackage();
         try {
             b.setImageDrawable(getActivity().getPackageManager().getApplicationIcon(defaultDialer));
@@ -164,62 +210,109 @@ public class FragmentT9 extends Fragment implements View.OnClickListener {
         });
     }
 
+
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void updateListWith(String token) {
 
+        if(appList==null || contactsInfoMap==null) {
+            Log.d("Perf", "onResume: ");
+            appList = MainActivity.appData;
+            contactsInfoMap = MainActivity.contactInfoMap;
+
+
+            Log.d("Perf", "appTrie init");
+            app_trie = initAppTrie(appList);
+            Log.d("Perf", "contactTrie init");
+            contact_trie = initContactTrie(contactsInfoMap);
+        }
+
+        Log.d("Perf", "update View init");
+        boolean isApp= toShowApp;
+
         String searchPrefix=token;
-        List<String> suggestions = trie.getT9ValueSuggestions(searchPrefix);
+        List<String> suggestions;
+
+        //change the icon of be2 button
+        ImageView icon1= getView().findViewById(R.id.icon1);
+        ImageView icon2= getView().findViewById(R.id.icon2);
+        ImageView icon3= getView().findViewById(R.id.icon3);
 
         //Generate a  list of AppData with string list
         newList.clear();
-        for (String s:suggestions) {
+        icon1.setImageDrawable(null);
+        icon2.setImageDrawable(null);
+        icon3.setImageDrawable(null);
 
-            if(MainActivity.appMap.containsKey(s))
-            {
-                //implies that the string is an app
-                String pkg=MainActivity.appMap.get(s);
-                Drawable icon=null;
-                try {
-                    icon = getActivity().getPackageManager().getApplicationIcon(pkg);
+        if(isApp){
+            suggestions = app_trie.getT9ValueSuggestions(searchPrefix);
 
-                }catch (Exception e)
-                {
+            for (String s:suggestions) {
+                    String pkg=MainActivity.appMap.get(s);
+                    Drawable icon=null;
+                    try {
+                        icon = getActivity().getPackageManager().getApplicationIcon(pkg);
 
+                    }catch (Exception e)
+                    {
+
+                    }
+                    newList.add(new AppInfo(s,pkg,icon));
+            }
+
+            icon1.setImageDrawable(newList.get(0).icon);
+            //add onclick listener
+            icon1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent launchIntent = getActivity().getPackageManager().getLaunchIntentForPackage(newList.get(0).packageName);
+                    startActivity(launchIntent);
                 }
-                newList.add(new AppInfo(s,pkg,icon));
+            });
+            if(newList.size()>1) {
+                icon2.setImageDrawable(newList.get(1).icon);
+                //add onclick listener
+                icon2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent launchIntent = getActivity().getPackageManager().getLaunchIntentForPackage(newList.get(1).packageName);
+                        startActivity(launchIntent);
+                    }
+                });
             }
-            else
-            {
-                //the string is a Contact
-                String number=MainActivity.contactInfoMap.get(s);
-                AppInfo info=new AppInfo();
-                info.isContact();
-                info.label=s;
-                info.contactNo=number;
-
-                newList.add(info);
-
+            if(newList.size()>2) {
+                icon3.setImageDrawable(newList.get(2).icon);
+                //add onclick listener
+                icon3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent launchIntent = getActivity().getPackageManager().getLaunchIntentForPackage(newList.get(2).packageName);
+                        startActivity(launchIntent);
+                    }
+                });
             }
-
 
         }
+        else {
+            suggestions = contact_trie.getT9ValueSuggestions(searchPrefix);
+            for (String s:suggestions) {
 
-        //update recycler view
-        adapter.notifyDataSetChanged();
+                String number = MainActivity.contactInfoMap.get(s);
+                AppInfo info = new AppInfo();
+                info.isContact();
+                info.label = s;
+                info.contactNo = number;
 
-        //change the icon of be2 button
-        ImageView b= getView().findViewById(R.id.be2);
+                newList.add(info);
+            }
 
-        if(newList.get(0).isContact)
-        {
             String defaultDialer=((TelecomManager)getActivity().getSystemService(Context.TELECOM_SERVICE)).getDefaultDialerPackage();
             try {
-                b.setImageDrawable(getActivity().getPackageManager().getApplicationIcon(defaultDialer));
+                icon1.setImageDrawable(getActivity().getPackageManager().getApplicationIcon(defaultDialer));
 
             }
             catch (Exception e){}
             //add onclick listener
-            b.setOnClickListener(new View.OnClickListener() {
+            icon1.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent call = new Intent(Intent.ACTION_CALL);
@@ -228,27 +321,22 @@ public class FragmentT9 extends Fragment implements View.OnClickListener {
                 }
             });
         }
-        else
-        {
-            b.setImageDrawable(newList.get(0).icon);
-            //add onclick listener
-            b.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent launchIntent = getActivity().getPackageManager().getLaunchIntentForPackage(newList.get(0).packageName);
-                    startActivity(launchIntent);
-                }
-            });
-        }
 
 
+        //update recycler view
+        adapter.notifyDataSetChanged();
+
+        Log.d("Perf", "Update View End");
     }
 
-    private T9Trie<String> initTrie(List<AppInfo> appList, Map<String, String> contactInfoMap){
+
+    private T9Trie<String> initAppTrie(List<AppInfo> appList){
 
         //String searchPrefix="42";
 
         final T9Trie<String> trie = new T9Trie<>();
+
+        if(appList != null)
         for (AppInfo app:appList)
         {
             LinkedList<String> l=new LinkedList<String>();
@@ -256,14 +344,25 @@ public class FragmentT9 extends Fragment implements View.OnClickListener {
             trie.insert(app.label, l);
         }
 
+        Log.d("Making app trie", "init ");
+        //trie.print();
+        return trie;
+    }
+    private T9Trie<String> initContactTrie(Map<String,String> contactInfoMap){
 
+        //String searchPrefix="42";
+
+        final T9Trie<String> trie = new T9Trie<>();
+
+        if(contactInfoMap != null)
         for(Map.Entry<String,String> ci:contactInfoMap.entrySet())
         {
             LinkedList<String> l=new LinkedList<String>();
             l.add(ci.getKey());
             trie.insert(ci.getKey(), l);
         }
-        trie.print();
+        Log.d("Making contact trie", "init ");
+        //trie.print();
         return trie;
     }
 

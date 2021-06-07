@@ -11,7 +11,7 @@ import com.example.launcher.FragmentWidget;
 
 public class ViewPagerAdapter extends FragmentPagerAdapter {
 
-    static final int NUM_PAGES=3;
+    static final int NUM_PAGES=2;
 
     public ViewPagerAdapter(FragmentManager fm) {
         super(fm);
@@ -21,11 +21,11 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position)
         {
+//            case 0:
+//                return new FragmentWidget();
             case 0:
-                return new FragmentWidget();
-            case 1:
                 return new FragmentHome();
-            case 2:
+            case 1:
                 return new FragmentT9();
         }
         return new FragmentHome();

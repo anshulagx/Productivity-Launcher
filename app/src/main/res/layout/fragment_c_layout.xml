@@ -24,7 +24,7 @@
         android:id="@+id/tableLayout"
         android:layout_width="413dp"
         android:layout_height="407dp"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -136,7 +136,6 @@
 
             <Button
                 android:id="@+id/b0"
-                android:layout_width="40dp"
                 android:layout_height="match_parent"
 
                 android:background="@color/colorPrimaryDark"
@@ -163,6 +162,25 @@
             </FrameLayout>
 
 
+            <Button
+                android:id="@+id/be3"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@color/colorPrimaryDark"
+                android:gravity="start|center_vertical"
+                android:paddingLeft="10dp"
+                android:text="BACK"
+                android:textColor="@color/colorPrimary" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.75"
+            android:gravity="end">
+
+
             <LinearLayout
 
                 android:id="@+id/be2old"
@@ -176,21 +194,41 @@
                 android:textColor="@color/colorPrimary">
 
                 <ImageView
-                    android:id="@+id/be2"
+                    android:id="@+id/icon3"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
+                    android:scaleType="fitCenter" />
+
+                <ImageView
+                    android:id="@+id/icon2"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="1"
+                    android:scaleType="fitCenter" />
+
+                <ImageView
+                    android:id="@+id/icon1"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="1"
                     android:scaleType="fitCenter" />
             </LinearLayout>
 
-            <Button
-                android:id="@+id/be3"
+            <Switch
+                android:id="@+id/switch2"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:background="@color/colorPrimaryDark"
-                android:gravity="start|center_vertical"
-                android:paddingLeft="10dp"
-                android:text="BACK"
-                android:textColor="@color/colorPrimary" />
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:text="Switch"
+                tools:checked="false" />
+
         </TableRow>
 
 

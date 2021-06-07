@@ -16,6 +16,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.database.Cursor;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -61,18 +62,21 @@ public class MainActivity extends AppCompatActivity  {
     private void doStuff()
     {
 
-
         //to be used elsewhere
-        appData=generateInstalledAppData();//appMAp is also initaialize here
-        contactInfoMap=generateContactsData();
-
+        Log.d("Perf", "appData collection async class call");
+        new MyTask1().execute();
+        //appData=generateInstalledAppData();//appMAp is also initaialize here
+        Log.d("Perf", "contactData collection async class call");
+        new MyTask2().execute();
+        //contactInfoMap=generateContactsData();
+        Log.d("Perf", "contactData next line");
 
         mPager = (ViewPager) findViewById(R.id.mainFrame);
         ViewPagerAdapter mPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
 
         mPager.setAdapter(mPagerAdapter);
 
-        mPager.setCurrentItem(1);
+        mPager.setCurrentItem(0);
 
 
         // get the gesture detector for pull down notification
@@ -93,9 +97,41 @@ public class MainActivity extends AppCompatActivity  {
     protected void onStart() {
         super.onStart();
         if(hasPermission) {
-            mPager.setCurrentItem(1);
+            mPager.setCurrentItem(0);
         }
     }
+
+    private class MyTask1 extends AsyncTask<Void, Void, String> {
+        @Override
+        protected String doInBackground(Void... voids) {
+            Log.d("Perf", "ASYNC appData collection from android started");
+            appData=generateInstalledAppData();//appMAp is also initaialize here
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            Log.d("Perf", "ASYNC appData collection from android ended");
+            super.onPostExecute(result);
+            // do something with result
+        }
+    }
+    private class MyTask2 extends AsyncTask<Void, Void, String> {
+        @Override
+        protected String doInBackground(Void... voids) {
+            Log.d("Perf", "ASYNC contactData collection from android started");
+            contactInfoMap=generateContactsData();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            Log.d("Perf", "ASYNC contactData collection from android ended");
+            super.onPostExecute(result);
+            // do something with result
+        }
+    }
+
     private List<AppInfo> generateInstalledAppData() {
         appMap=new HashMap<String,String>();
         PackageManager pm = getPackageManager();

@@ -16,6 +16,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -38,8 +39,11 @@ public class FragmentT9 extends Fragment implements View.OnClickListener {
     static String token;
     List<AppInfo> appList;
     Map<String,String> contactsInfoMap;
-    T9Trie<String> trie,app_trie,contact_trie;
+    T9Trie<String> app_trie,contact_trie;
+
+    RecyclerView recyclerView;
     RecyclerView.Adapter adapter;
+
     List<AppInfo> newList;
 
     Switch toggleSwitch;
@@ -86,27 +90,43 @@ public class FragmentT9 extends Fragment implements View.OnClickListener {
                 return false;
             }
         });
+//        while(MainActivity.appData == null || MainActivity.contactInfoMap==null){}
+//        appList = MainActivity.appData;
+//        contactsInfoMap = MainActivity.contactInfoMap;
+//
+//        Log.d("Perf", "appTrie init");
+//        app_trie = initAppTrie(appList);
+//        Log.d("Perf", "contactTrie init");
+//        contact_trie = initContactTrie(contactsInfoMap);
 
-        appList=MainActivity.appData;
-        contactsInfoMap=MainActivity.contactInfoMap;
+        newList = new ArrayList<AppInfo>();
 
-        //to be removed
-        //trie=initTrie(appList,contactsInfoMap);
-
-        app_trie=initAppTrie(appList);
-        contact_trie=initContactTrie(contactsInfoMap);
-
-        newList=new ArrayList<AppInfo>();
-
-        RecyclerView recyclerView=(RecyclerView)view.findViewById(R.id.search_recycler_view);
+        recyclerView=(RecyclerView)view.findViewById(R.id.search_recycler_view);
         RecyclerView.LayoutManager layoutManager=new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
-        adapter=new FragmentC_RecyclerViewAdapter(newList);
+        adapter = new FragmentC_RecyclerViewAdapter(newList);
         recyclerView.setAdapter(adapter);
+
 
         return view;
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+
+    }
+
+        public void setUserVisibleHint(boolean isVisibleToUser) {
+            super.setUserVisibleHint(isVisibleToUser);
+            if (isVisibleToUser) {
+
+            }
+            else {
+            }
+        }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -159,8 +179,11 @@ public class FragmentT9 extends Fragment implements View.OnClickListener {
             makePhoneCallAt(token);
         }
         else
-            updateListWith(token);
-
+            try {
+                updateListWith(token);
+            }catch(Exception e){
+                Toast.makeText(view.getContext(),"Please Wait",Toast.LENGTH_SHORT).show();
+            }
 
 
     }
@@ -191,6 +214,19 @@ public class FragmentT9 extends Fragment implements View.OnClickListener {
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void updateListWith(String token) {
 
+        if(appList==null || contactsInfoMap==null) {
+            Log.d("Perf", "onResume: ");
+            appList = MainActivity.appData;
+            contactsInfoMap = MainActivity.contactInfoMap;
+
+
+            Log.d("Perf", "appTrie init");
+            app_trie = initAppTrie(appList);
+            Log.d("Perf", "contactTrie init");
+            contact_trie = initContactTrie(contactsInfoMap);
+        }
+
+        Log.d("Perf", "update View init");
         boolean isApp= toShowApp;
 
         String searchPrefix=token;
@@ -290,37 +326,17 @@ public class FragmentT9 extends Fragment implements View.OnClickListener {
         //update recycler view
         adapter.notifyDataSetChanged();
 
-
+        Log.d("Perf", "Update View End");
     }
 
-    private T9Trie<String> initTrie(List<AppInfo> appList, Map<String, String> contactInfoMap){
-
-        //String searchPrefix="42";
-
-        final T9Trie<String> trie = new T9Trie<>();
-        for (AppInfo app:appList)
-        {
-            LinkedList<String> l=new LinkedList<String>();
-            l.add(app.label);
-            trie.insert(app.label, l);
-        }
-
-
-        for(Map.Entry<String,String> ci:contactInfoMap.entrySet())
-        {
-            LinkedList<String> l=new LinkedList<String>();
-            l.add(ci.getKey());
-            trie.insert(ci.getKey(), l);
-        }
-        trie.print();
-        return trie;
-    }
 
     private T9Trie<String> initAppTrie(List<AppInfo> appList){
 
         //String searchPrefix="42";
 
         final T9Trie<String> trie = new T9Trie<>();
+
+        if(appList != null)
         for (AppInfo app:appList)
         {
             LinkedList<String> l=new LinkedList<String>();
@@ -329,7 +345,7 @@ public class FragmentT9 extends Fragment implements View.OnClickListener {
         }
 
         Log.d("Making app trie", "init ");
-        trie.print();
+        //trie.print();
         return trie;
     }
     private T9Trie<String> initContactTrie(Map<String,String> contactInfoMap){
@@ -338,7 +354,7 @@ public class FragmentT9 extends Fragment implements View.OnClickListener {
 
         final T9Trie<String> trie = new T9Trie<>();
 
-
+        if(contactInfoMap != null)
         for(Map.Entry<String,String> ci:contactInfoMap.entrySet())
         {
             LinkedList<String> l=new LinkedList<String>();
@@ -346,7 +362,7 @@ public class FragmentT9 extends Fragment implements View.OnClickListener {
             trie.insert(ci.getKey(), l);
         }
         Log.d("Making contact trie", "init ");
-        trie.print();
+        //trie.print();
         return trie;
     }
 

@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="#6C7B7E"
+    android:background="#BA000000"
     android:orientation="vertical">
+
 
     <EditText
         android:id="@+id/popupTxt"
@@ -11,27 +14,36 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:layout_margin="30dp"
+        android:fontFamily="sans-serif-smallcaps"
+        android:inputType="textMultiLine"
+        android:textColor="#FFFFFF"
         android:textSize="22sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:orientation="horizontal"
+        android:padding="5dp">
 
         <Button
             android:id="@+id/c1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginTop="2dp"
             android:layout_weight="1"
             android:background="@color/noteHighlight1"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
             android:text="" />
 
         <Button
             android:id="@+id/c2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginTop="2dp"
             android:layout_weight="1"
             android:background="@color/noteHighlight2"
             android:paddingLeft="20dp"
@@ -42,6 +54,9 @@
             android:id="@+id/c3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginTop="2dp"
             android:layout_weight="1"
             android:background="@color/noteHighlight3"
             android:paddingLeft="20dp"
@@ -52,6 +67,9 @@
             android:id="@+id/c4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginTop="2dp"
             android:layout_weight="1"
             android:background="@color/noteHighlight4"
             android:paddingLeft="20dp"
@@ -62,6 +80,9 @@
             android:id="@+id/c5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginTop="2dp"
             android:layout_weight="1"
             android:background="@color/noteHighlight5"
             android:paddingLeft="20dp"
@@ -73,6 +94,9 @@
             android:id="@+id/c6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginTop="2dp"
             android:layout_weight="1"
             android:background="@color/noteHighlight6"
             android:paddingLeft="20dp"
@@ -84,24 +108,47 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:layout_margin="10dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:padding="10dp">
 
-        <Button
+
+        <net.steamcrafted.materialiconlib.MaterialIconView
             android:id="@+id/popupSaveBtn"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="Save"
-            android:background = "@drawable/round_button"/>
-
-        <Button
-            android:id="@+id/popupDeleteBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Delete"
-            android:background = "@drawable/round_button"/>
+            android:scaleType="center"
+            app:materialIcon="content_save"
+            app:materialIconColor="#8BC34A"
+            app:materialIconSize="54dp" />
+
+        <net.steamcrafted.materialiconlib.MaterialIconView
+            android:id="@+id/popupSmartSaveBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:scaleType="center"
+            app:materialIcon="calendar"
+            app:materialIconColor="#4CAF50"
+            app:materialIconSize="54dp"
+            tools:visibility="gone" />
+
+
+        <net.steamcrafted.materialiconlib.MaterialIconView
+            android:id="@+id/popupDeleteBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:scaleType="center"
+            app:materialIcon="delete"
+            app:materialIconColor="#F44336"
+            app:materialIconSize="54dp" />
+
+
     </LinearLayout>
+
 
 
 </LinearLayout>

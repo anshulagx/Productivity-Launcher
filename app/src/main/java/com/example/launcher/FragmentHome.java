@@ -17,6 +17,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -32,6 +34,9 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.example.launcher.utils.AppInfo;
+import com.example.launcher.utils.CalendarManager;
+import com.example.launcher.utils.TextParser;
+
 import java.util.List;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
@@ -293,28 +298,28 @@ public class FragmentHome extends Fragment implements View.OnClickListener {
         //called when a note is clicked
 
         TextView txt=(TextView)view;
-        switch (view.getId())
-        {
-            case R.id.note1:
-                showPopupWindow(R.id.note1,txt.getText().toString());
-                break;
-            case R.id.note2:
-                showPopupWindow(R.id.note2,txt.getText().toString());
-                break;
-            case R.id.note3:
-                showPopupWindow(R.id.note3,txt.getText().toString());
-                break;
-             case R.id.note4:
-                showPopupWindow(R.id.note4,txt.getText().toString());
-                 break;
-            case R.id.note5:
-                showPopupWindow(R.id.note5,txt.getText().toString());
-                break;
-            case R.id.note6:
-                showPopupWindow(R.id.note6,txt.getText().toString());
-                 break;
-        }
-
+//        switch (view.getId())
+//        {
+//            case R.id.note1:
+//                showPopupWindow(R.id.note1,txt.getText().toString());
+//                break;
+//            case R.id.note2:
+//                showPopupWindow(R.id.note2,txt.getText().toString());
+//                break;
+//            case R.id.note3:
+//                showPopupWindow(R.id.note3,txt.getText().toString());
+//                break;
+//             case R.id.note4:
+//                showPopupWindow(R.id.note4,txt.getText().toString());
+//                 break;
+//            case R.id.note5:
+//                showPopupWindow(R.id.note5,txt.getText().toString());
+//                break;
+//            case R.id.note6:
+//                showPopupWindow(R.id.note6,txt.getText().toString());
+//                 break;
+//        }
+        showPopupWindow(view.getId(),txt.getText().toString());
     }
 
     public void showPopupWindow(final int noteId,String def) {
@@ -404,7 +409,7 @@ public class FragmentHome extends Fragment implements View.OnClickListener {
             }
         });
 
-        Button saveBtn=popupView.findViewById(R.id.popupSaveBtn);
+        View saveBtn= popupView.findViewById(R.id.popupSaveBtn);
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -421,7 +426,7 @@ public class FragmentHome extends Fragment implements View.OnClickListener {
             }
         });
 
-        Button deleteBtn=popupView.findViewById(R.id.popupDeleteBtn);
+        View deleteBtn= popupView.findViewById(R.id.popupDeleteBtn);
         deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -438,6 +443,44 @@ public class FragmentHome extends Fragment implements View.OnClickListener {
             }
         });
 
+        View smartSaveBtn= popupView.findViewById(R.id.popupSmartSaveBtn);
+        smartSaveBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String t=txt.getText().toString();
+                popupWindow.dismiss();
+
+                //hide keyboard
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(popupView.getWindowToken(), 0);
+                textView.setText("");
+                if (t.length() >0 && TextParser.isParsable(t))
+                    new CalendarManager().parseAndAdd(t,getContext());
+            }
+        });
+        smartSaveBtn.setVisibility(View.GONE);
+        txt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String t=txt.getText().toString();
+                if (t.length() >0 && TextParser.isParsable(t))
+                    smartSaveBtn.setVisibility(View.VISIBLE);
+                else
+                    smartSaveBtn.setVisibility(View.GONE);
+
+            }
+        });
 
 
 

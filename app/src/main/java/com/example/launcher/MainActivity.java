@@ -11,29 +11,39 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.CalendarContract;
 import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import com.example.launcher.utils.AppInfo;
 import com.example.launcher.utils.ViewPagerAdapter;
+import com.google.android.material.snackbar.Snackbar;
+
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+
 
 public class MainActivity extends AppCompatActivity  {
 
@@ -46,15 +56,16 @@ public class MainActivity extends AppCompatActivity  {
     public static HashMap<String, String> contactInfoMap;
 
     boolean hasPermission;
-
     ViewPager mPager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         //permission stuff
         hasPermission=false;
+        //also has calendar permissions
         checkPermission(Manifest.permission.CALL_PHONE,Manifest.permission.READ_CONTACTS,30,20);
 
 
@@ -196,6 +207,9 @@ public class MainActivity extends AppCompatActivity  {
     // Function to check and request permission.
     private void checkPermission(String permission1,String permission2, int requestCode1,int requestCode2)
     {
+        //calendar permission
+        ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_CALENDAR}, 5631);
+
         if (ContextCompat.checkSelfPermission(MainActivity.this, permission1)
                 == PackageManager.PERMISSION_DENIED) {
             // Requesting the permission
@@ -240,6 +254,7 @@ public class MainActivity extends AppCompatActivity  {
         }
 
     }
+
 
 
 }

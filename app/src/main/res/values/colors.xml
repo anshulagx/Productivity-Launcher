@@ -4,8 +4,8 @@
     <color name="colorPrimaryDark">#000000</color>
     <color name="colorAccent">#AAA4A6</color>
 
-    <color name="noteHighlight1">#48CF6679</color>
-    <color name="noteHighlight2">#000000</color>
+    <color name="noteHighlight1">#E91E63</color>
+    <color name="noteHighlight2">#CDDC39</color>
     <color name="noteHighlight3">#4ABB86FC</color>
     <color name="noteHighlight4">#3203DAC6</color>
     <color name="noteHighlight5">#483700B3</color>

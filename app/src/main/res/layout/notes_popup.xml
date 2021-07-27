@@ -114,26 +114,36 @@
         android:padding="10dp">
 
 
-        <net.steamcrafted.materialiconlib.MaterialIconView
-            android:id="@+id/popupSaveBtn"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:scaleType="center"
-            app:materialIcon="content_save"
-            app:materialIconColor="#8BC34A"
-            app:materialIconSize="54dp" />
+            android:orientation="horizontal">
 
-        <net.steamcrafted.materialiconlib.MaterialIconView
-            android:id="@+id/popupSmartSaveBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:scaleType="center"
-            app:materialIcon="calendar"
-            app:materialIconColor="#4CAF50"
-            app:materialIconSize="54dp"
-            tools:visibility="gone" />
+            <net.steamcrafted.materialiconlib.MaterialIconView
+                android:id="@+id/popupSaveBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:scaleType="center"
+                app:materialIcon="content_save"
+                app:materialIconColor="#8BC34A"
+                app:materialIconSize="54dp"
+                android:background="#1E9DCF85"/>
+
+            <net.steamcrafted.materialiconlib.MaterialIconView
+                android:id="@+id/popupSmartSaveBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:scaleType="center"
+                app:materialIcon="calendar"
+                app:materialIconColor="#4CAF50"
+                app:materialIconSize="54dp"
+                tools:visibility="gone"
+                android:background="#178EE47B"/>
+
+        </LinearLayout>
 
 
         <net.steamcrafted.materialiconlib.MaterialIconView
@@ -144,7 +154,8 @@
             android:scaleType="center"
             app:materialIcon="delete"
             app:materialIconColor="#F44336"
-            app:materialIconSize="54dp" />
+            app:materialIconSize="54dp"
+            android:background="#0FE82727"/>
 
 
     </LinearLayout>

@@ -5,10 +5,10 @@
     <color name="colorAccent">#AAA4A6</color>
 
     <color name="noteHighlight1">#E91E63</color>
-    <color name="noteHighlight2">#CDDC39</color>
-    <color name="noteHighlight3">#4ABB86FC</color>
-    <color name="noteHighlight4">#3203DAC6</color>
+    <color name="noteHighlight2">#4CAF50</color>
+    <color name="noteHighlight3">#FF5722</color>
+    <color name="noteHighlight4">#03A9F4</color>
     <color name="noteHighlight5">#483700B3</color>
-    <color name="noteHighlight6">#3C3C3B</color>
+    <color name="noteHighlight6">#000000</color>
 
 </resources>
